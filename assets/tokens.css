@@ -1,0 +1,25 @@
+/* Scope to business content; never style host navigation globally. */
+.wb-root {
+  --wb-paper: #F3F9FC; --wb-surface: #ffffff; --wb-ink: #203D50;
+  --wb-muted: #496777; --wb-line: #CDDFE9; --wb-mint: #E5F3F9;
+  --wb-mint-ink: #17638C; --wb-action: #17638C; --wb-action-ink: #ffffff;
+  --wb-pink: #FFF1E5; --wb-blue: #E5F3F9; --wb-yellow: #FFF1E5;
+  --wb-brand: #83C4DF; --wb-accent: #E8873D; --wb-accent-ink: #9B4613;
+  --wb-radius: 16px; --wb-gap: 16px; --wb-group-gap: 24px;
+  color: var(--wb-ink); background: var(--wb-paper); font: 16px/1.65 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  font-variant-numeric: tabular-nums; min-width: 0; min-height: 0; container-type: inline-size;
+}
+.wb-root[data-font=large] { font-size: 19px; }
+.wb-root * { box-sizing: border-box; }
+.wb-root button,.wb-root input,.wb-root select { font: inherit; }
+.wb-root button { min-height: 44px; cursor: pointer; }
+.wb-root :focus-visible { outline: 3px solid var(--wb-mint-ink); outline-offset: 3px; }
+.wb-root .wb-primary { background: var(--wb-action); color: var(--wb-action-ink); border: 0; border-radius: 999px; padding: 9px 20px; }
+.wb-root .wb-flower { display: inline-block; width: 24px; height: 24px; flex: 0 0 auto; margin-inline-end: 10px; animation: wb-flower-turn 12s linear infinite; }
+@keyframes wb-flower-turn { to { transform: rotate(360deg); } }
+@media (prefers-color-scheme: dark) {
+  .wb-root { --wb-paper:#142630; --wb-surface:#1C3442; --wb-ink:#EAF5FA; --wb-muted:#B9D1DE; --wb-line:#476474; --wb-mint:#244B60; --wb-mint-ink:#9FD5ED; --wb-action:#9FD5ED; --wb-action-ink:#142630; --wb-pink:#49352A; --wb-blue:#244B60; --wb-yellow:#49352A; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wb-root .wb-flower { animation:none; }
+}

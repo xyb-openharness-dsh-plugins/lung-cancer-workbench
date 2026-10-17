@@ -1,0 +1,11 @@
+﻿id,scene,trigger,artifact,v,s,f,hvt,c,level,p,evidence,status
+LU-01,穿刺/EBUS 与标本流转,被建议活检或等待检测,取材-标本-病理-分子各状态与待问,3,3,3,9,4,W,9,SCENARIOS.md:13; SCHEMA.md:35-37; ACCEPTANCE.md:12,open
+LU-02,NSCLC 与 SCLC 分叉,病理写着小细胞/非小细胞,两条独立路径与不互套说明,3,3,3,9,5,OK,0,SCENARIOS.md:14-15; SCHEMA.md:38-39; ACCEPTANCE.md:8-18,open
+LU-03,分子分型与靶向,拿到 EGFR/ALK/ROS1 结果,变异-知识卡-个人处方/问题,3,3,3,9,4,W,9,SCHEMA.md:40; ACCEPTANCE.md:13-15,open
+LU-04,PD-L1 与免疫治疗,看到 PD-L1 百分比或开始免疫,理解不是靶点+哪些反应要报,3,3,2,6,3,G,12,ACCEPTANCE.md:18 仅状态不合并,open
+LU-05,术后肺功能与活动耐量,肺叶切除后气促/活动下降,功能自述基线与变化,2,3,2,6,0,B,30,grep 肺功能|活动耐量=0; SCENARIOS.md:15,open
+LU-06,放疗与放射性肺炎,放疗定位/分次中咳嗽发热,计划/实际/暂停与原文化,3,2,2,6,4,W,6,ACCEPTANCE.md:36; SCHEMA.md:44,open
+LU-07,脑转移,新发头痛/抽搐,部位事件与 MDT 问题,3,2,2,6,4,W,6,METASTASIS-AND-REASSESSMENT.md:9; ACCEPTANCE.md:17,open
+LU-08,恶性胸腔积液,胸水反复/气促加重,引流记录与局部治疗问题,3,3,2,6,1,B,24,SPEC.md:74; METASTASIS-AND-REASSESSMENT.md:12,open
+LU-09,咯血与急症边界,咯血,三档联系条件,3,2,2,6,2,B,18,METASTASIS-AND-REASSESSMENT.md:26; ACCEPTANCE.md:24,open
+LU-11,手术记录与术后病理,术后拿到病理报告,切缘/淋巴结/术式原文与并列,2,2,2,4,4,W,4,ACCEPTANCE.md:35,open

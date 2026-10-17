@@ -1,0 +1,18 @@
+{
+  "packageName": "@xyb-openharness-dsh-plugins/lung-cancer-workbench",
+  "title": "肺癌患者与照护者工作台",
+  "repository": "https://github.com/xyb-openharness-dsh-plugins/lung-cancer-workbench",
+  "description": "面向肺癌患者与照护者的本机资料、就诊准备与综合照护工作台（需求共创中）",
+  "slug": "lung-cancer-workbench",
+  "layoutMode": "business-first",
+  "businessWidth": 0.65,
+  "targetUsers": "肺癌患者及照护者；主要操作者与病程覆盖待互动确认",
+  "scenario": "设计假设：围绕就诊与日常照护，减少资料分散、信息难懂和沟通遗漏；首要场景待确认",
+  "coreFlow": [
+    "设计假设：选择本机资料目录并导入报告",
+    "设计假设：核对候选信息，整理关心的问题和照护困难",
+    "设计假设：借助原生Agent理解资料并准备就诊沟通内容",
+    "设计假设：保存可回顾的资料与沟通结果"
+  ],
+  "completion": "设计假设：得到来源可追溯、可核对、可回顾的就诊准备材料；真实成功标准待确认"
+}

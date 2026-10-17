@@ -1,0 +1,3 @@
+- insert:
+    - id: lung-cancer-workbench-main
+      name: "@xyb-openharness-dsh-plugins/lung-cancer-workbench"
