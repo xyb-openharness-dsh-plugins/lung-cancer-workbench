@@ -8,6 +8,7 @@
   "exports": {
     ".": "./dsh/index.js",
     "./client": "./lib/client.js",
+    "./domain/clinical-records": "./lib/domain/clinical-records.js",
     "./package.json": "./package.json",
     "./cordis.patch.yml": "./cordis.patch.yml"
   },
@@ -21,6 +22,7 @@
   ],
   "scripts": {
     "check": "node --check dsh/index.js && node --check lib/client.js && node scripts/check-workbench-package.mjs .",
+    "test": "node --test",
     "pack:check": "npm pack --dry-run"
   },
   "dsh": {

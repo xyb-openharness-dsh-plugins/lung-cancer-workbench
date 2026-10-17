@@ -1,0 +1,12 @@
+prototype_area,prototype_action,domain_capability,acceptance,implementation_status,evidence,remaining
+我的资料,创建/选择病例主体,createCaseFile,AC20,domain_ready,test/clinical-records.test.js,DSH界面与持久化未实现
+病理确诊,添加诊断原文与病理类型断言,appendRecord(diagnosis),AC02;AC04,domain_ready,test/clinical-records.test.js,解析/导入/来源链接 UI 未实现
+穿刺与样本,记录取材方式部位和样本 ID,appendRecord(specimen),AC06;AC25;AC36,domain_ready,test/clinical-records.test.js,样本流转实体/时间线 UI 未实现
+基因检测,记录方法范围状态与样本引用,appendRecord(molecular_test),AC06;AC07;AC36,domain_ready,test/clinical-records.test.js,结果字段细化与报告批次 UI 未实现
+治疗记录,区分计划/安排/实际/完成,appendRecord(surgery|systemic_therapy|radiotherapy),AC10;AC25-AC27;AC38,domain_ready,test/clinical-records.test.js,方案详情/临床知识 UI 未实现
+病灶与转移,保存来源及原文分级,appendRecord(lesion),AC11;AC39,domain_ready,record kind + validator,专门验收和 UI 未实现
+用户核对,接受/编辑/拒绝/暂缓候选记录,reviewRecord,AC19;AC20,domain_ready,test/clinical-records.test.js,字段级差异展示与审计 UI 未实现
+复诊准备,生成问题与摘要并引用接受记录,visit_question + brief,AC20;AC21,not_started,API-CONTRACT.md,摘要/导出未实现
+一图秀,多轨时间窗与多指标联动,versioned read model,AC13;AC28-AC30,not_started,PROTOTYPE-FREEZE.md,图表/筛选/交互未实现
+临床试验,多通道检索收藏与来源快照,trial search read model,AC14,not_started,reference/trials/README.md,仅有离线发现快照与原型模拟
+配置,来源/目录/AI/隐私设置,host capability adapter,AC22-AC24,not_started,02-DSH-CONTRACT.md,目标 Desktop 合同未锁定

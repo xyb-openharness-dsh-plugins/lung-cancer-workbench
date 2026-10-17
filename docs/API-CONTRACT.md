@@ -2,6 +2,12 @@
 
 只定义业务边界，不猜测DSH未核验的服务名或路由。静态原型用MockAdapter；mock不得标真实完成。各命令Schema后续用运行时validator实现。
 
+## 首片代码状态（2026-10-17）
+
+`lib/domain/clinical-records.js` 提供纯领域函数 `createCaseFile`、`appendRecord`、`reviewRecord`，并以 optimistic revision 拒绝过期写入。该模块只改不可变 JS 对象，不执行文件或数据库读写，也未被 DSH HTTP route 调用。9 个 Node 测试覆盖其当前合同。具体映射见 `IMPLEMENTATION-PARITY.csv`。以下接口仍是产品设计合同，不能视为已完成。
+
+首片保留标本 ID/材料/取材文本、组织学/临床类型断言、分子检测方法/范围/状态、事件计划或实际状态、来源引用、日期精度及候选核对状态。记录可追加，核对决策单独留痕；领域层不推断阴性、诊断、转移、疗效或适用治疗。
+
 ## 写命令
 
 | 命令 | 输入要点 | 输出/幂等/失败恢复 |
