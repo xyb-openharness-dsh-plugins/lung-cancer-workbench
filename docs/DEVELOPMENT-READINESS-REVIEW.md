@@ -2,6 +2,18 @@
 
 审查日期：2026-10-17。范围：设计冻结、业务规格、现有工作台骨架、验收基线与肺癌试验 SQLite 快照。不是临床指南审查，也不是代码安全或 Desktop 兼容性认证。
 
+### 当前状态补记（2026-10-18）
+
+上述审查是当日历史快照，试验库统计已被新版数据替代：官方 ClinicalTrials.gov API v2 按首次发布日期查询最近 9 个月，返回 913 条；标题/条件字段筛选并按 NCT 去重后入库 805 条（NSCLC 469、SCLC 81、混合 19、其他肺癌相关 236），108 条被排除。数据库 `integrity_check=ok`。Veeva CTV 为 CT.gov 数据发现界面，不构成独立来源计数；其他注册源本轮未获得可核验完整结果，也未接入产品。
+
+当前工作台 `0.1.2-rc.2` 已安装到 DSH Desktop app 自己的 Harness profile：app profile 依赖 tarball、bundle 注册、node_modules 版本和 `desktop-workbenches/state.json` 均已核对一致。安装使用 app 随附 pnpm runner（10.34.5），并明确设置 `DSH_HOME` 指向 app Support 目录。24/24 自动化测试、静态包检查和 pack dry-run 通过。实际 UI 仍不可访问：CUA 无窗口，Launch Services 打开失败 `-10827`，app bundle 的 strict codesign 校验失败且未定位具体文件。此前误写入通用 `~/.dsh` 的副本已撤销。需先恢复 DSH Desktop app 可启动性，再做 RC 加载、切换器、业务流与 parity 验收。
+
+### 开发阶段状态更新（2026-10-17）
+
+项目已进入代码实现：领域/SQLite/API/客户端首个切片已有 22 项自动测试；`npm run check` 和 npm 包 dry-run 通过。目标 app 已只读核实为 DSH Desktop `0.12.0`（macOS app）；app.asar 内 Harness `dsh-client-connection` 与 `dsh-host-webserver` 为 `0.2.0-rc.2`，Cordis `4.0.4`、Schemastery `3.18.4`。`package.json` peer 下限已与该 RC 对齐。
+
+下表是设计开工前审查快照，其中有关“没有实现/未核实”的描述以当时为准；最新代码状态以 [TASKS](TASKS.md)、[IMPLEMENTATION-PARITY](IMPLEMENTATION-PARITY.csv) 和 [ACCEPTANCE](ACCEPTANCE.md) 为准。目标 app 的活动安装路径、Electron Node/SQLite runtime、真实加载和 UI 仍未核实，因此不得称为 Desktop 已兼容。
+
 ## 结论
 
 **可以开始受控的工程基线和无临床建议的垂直切片；还不具备完整患者产品开发/发布条件。** 用户与场景方向已明确，v4.1.0 原型已冻结，肺癌核心实体和 API 草案覆盖较广。工程开工前仍需锁定目标 Desktop 合同、建立源码基线、把 v4 转成可追踪的实现 parity，并确定首片的可执行数据/迁移方案。可与这些工作并行开展患者任务走查和医学来源审核。未获临床审核的提示、用药解释和急症内容不得作为正式患者建议上线。
@@ -13,15 +25,15 @@
 - 用户群体为肺癌患者和照护者；目标覆盖 SCLC/NSCLC 全病程，优先治疗与复诊准备；设计参考和品牌 Logo 已由用户确认。
 - v4.1.0 有 10 个一级模块、27 个二级页，并覆盖患者情境、配置、临床试验搜索、收藏与回顾；版本和冻结 hash 见 [`PROTOTYPE-FREEZE.md`](PROTOTYPE-FREEZE.md)。
 - 概念数据模型覆盖报告版本、取材/标本、病理/分子、治疗、病灶、胸腔操作、照护、收藏快照与导出；API 草案覆盖主要写命令和读模型。
-- `npm run check` 通过；v4.1.0 内联脚本通过 `node --check`；数据库 `integrity_check=ok`、重复 NCT 编号为 0、14 条均有登记来源 URL。
-- 试验快照数据统计见 [`reference/trials/README.md`](../reference/trials/README.md)。SQLite 是 14 条；v4 另有 14 条原型历史示例，不能把 28 条当成爬取数据库的记录量。
+- 当日 `npm run check` 与 v4.1.0 内联脚本 `node --check` 通过；当日 SQLite 完整性检查为 `ok`，当时的 14 条记录均有来源 URL。此数字已由 2026-10-18 官方 API 快照更新取代。
+- 2026-10-17 审查时 SQLite 为 14 条，v4 另有 14 条原型历史示例。当前快照统计以 [`reference/trials/README.md`](../reference/trials/README.md) 为准。
 
 ## 开始业务实现前的工程闸门
 
 | 优先级 | 未完成项 | 为什么影响开发 | 最小完成证据 |
 | --- | --- | --- | --- |
 | G0 | 建立 Git 仓库/分支与首个基线提交 | 已完成：分支 `codex/records-slice`；冻结原型、SPEC、schema/API、任务、验收与公开试验快照已基线提交 `1c4d9d6`，领域首片提交 `a8c9098` | 后续提交保持本地可追溯；当前不推送 |
-| G0 | 锁定目标 DSH Desktop、OS/架构与安装 profile | 当前没有目标宿主版本；`customFrame`、连接/会话、文件授权、sqlite runtime 等尚未实测 | 能力矩阵：版本与来源、支持/不支持、最小接入 demo、安装后真实渲染证据；官方接口与目标版本对应 |
+| G0 | 锁定目标 DSH Desktop、OS/架构与安装 profile | 部分完成：目标 app `0.12.0`、Harness `0.2.0-rc.2`、Cordis `4.0.4`、Schemastery `3.18.4` 已从 app bundle 只读核实；活动安装 profile、Node runtime 与包安装入口未核实 | 从 Desktop app 确认活动 profile/插件安装入口；最小包在该 app 内真实加载，记录实际 Node/SQLite 和 UI 能力；若需重启由用户手动完成 |
 | G0 | 建立 v4 页面/状态/动作 parity 矩阵 | 已建 `IMPLEMENTATION-PARITY.csv` 初稿，但只有首片主要模块映射；大量二级页/状态/API/AC/验证还未逐项对应 | 完成全部页面及状态/动作映射，明确延期和验收证据 |
 | G0 | 确认首个垂直切片和架构决策 | 已限定首片为来源可追溯的诊疗事件领域内核；仅纯函数/内存对象，不上传、不持久化、不调用 AI，也未接入宿主 UI | 目标 Desktop 信息确认后，补宿主和存储 ADR、错误/恢复交互及首片端到端 UI |
 | G0 | 把概念 SCHEMA/API 转成首片可执行合同 | 部分完成：来源/日期/状态/revision validator、追加与复核决策已实现；未有 DDL、事务存储、迁移、备份/恢复或路径授权 | 锁定 schema v1 与运行时适配，完成迁移/恢复和权限测试；不让原件/DB 引用断链 |
@@ -48,4 +60,4 @@
 
 ## 明确不应声称的状态
 
-现在只能说“设计原型 v4.1.0 已冻结、接入骨架静态检查通过、肺癌试验 SQLite 有 14 条非穷尽记录”。不能说业务已实现、临床审核通过、患者可用性已验证、28 条都是已爬取数据、Veeva/其它平台已接成在线搜索，或工作台已装入 Desktop。
+截至 2026-10-17 审查结束时，只能说“设计原型 v4.1.0 已冻结、接入骨架静态检查通过、肺癌试验 SQLite 有 14 条非穷尽记录”。该句记录当时状态，不代表当前数据量；仍不能说业务端到端实现、临床审核通过、患者可用性已验证、28 条都是爬取数据或 Veeva/其它平台已接成在线搜索。

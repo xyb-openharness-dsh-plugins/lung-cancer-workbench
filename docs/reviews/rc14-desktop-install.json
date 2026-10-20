@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-20",
+  "version": "0.1.2-rc.14",
+  "profile": "/Users/qinxiaoqiang/Library/Application Support/dsh-desktop/harness/profiles/web",
+  "dependency": "file:/Users/qinxiaoqiang/Downloads/lung-cancer-workbench/release/xyb-openharness-dsh-plugins-lung-cancer-workbench-0.1.2-rc.14.tgz",
+  "tarballSha256": "f332d0dbb0a8486bb0db3b88e16ece13be3316975e68c0fb92093158533d90e7",
+  "clientSha256": "28c94bd2c287e7218165ff40580cade08439ea6b11ff4f22eb26cd38211421f4",
+  "checks": [
+    "package/VERSION",
+    "source=packaged=installed client",
+    "SQLite unchanged",
+    "profile dependency"
+  ],
+  "tests": "51/51",
+  "restart": "manual; not restarted",
+  "change": "short metric names only; full identity stays in tooltips and accessible labels"
+}

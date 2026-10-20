@@ -1,41 +1,32 @@
-# 肺癌临床试验登记快照（2026）
+# 肺癌临床试验 SQLite 快照
 
-采集日：2026-10-17。文件：`lung-cancer-trials-2026.sqlite`。目前共 14 条肺癌相关记录（11 条显示 2026 年开始，3 条仅确认 2026 年发布/更新），包含 SCLC、NSCLC 和肺癌筛查。它仍是扩充后的发现快照，不是 2026 年全量。
+快照采集日：2026-10-18。数据库：`assets/data/lung-cancer-trials.sqlite`。窗口按首次发布日期计算最近 9 个日历月：2026-01-18 至 2026-10-18。当前 API 结果中最早符合记录为 2026-01-20。
 
-## 范围与来源
+## 核验统计
 
-本快照分两组：`start_2026` 表示来源页显示研究开始日期落在 2026 年；实际/估计状态和日期精度写在 `start_date_type`，部分 Veeva 搜索展示未注明实际/估计，因此会显式保留未知。`posted_or_updated_2026` 表示 2026 年有发布/更新记录，但不据此假定研究于 2026 年开始。记录均链接到 ClinicalTrials.gov 原始登记页。
+使用 ClinicalTrials.gov 官方 API v2，以 `query.cond=lung cancer` 和 `AREA[StudyFirstPostDate]RANGE[2026-01-18,2026-10-18]` 查询，`countTotal=true`、每页 1000 条：
 
-用户指定的 `unified_search_trials` MCP 服务已核验数据源状态；当时本地可用归档没有肺癌覆盖（就绪的本地归档为胰腺癌数据，其他肺癌/通用登记源未就绪或未配置）。首版数据没有查 Veeva CTV，这是首轮检索遗漏；本次已将 ClinicalTrials.Veeva（CTV）纳入定向搜索。CTV 免费面向患者的试验搜索页面展示试验和地点，并注明其试验数据来源为 ClinicalTrials.gov，所以它是发现/浏览入口，不是独立于 ClinicalTrials.gov 的另一套注册库。Veeva OpenData Clinical 是不同的商业临床运营数据产品，不能混为一谈。新增的 Veeva 发现记录保存 `discovery_source` 与 `discovery_url`，并通过 NCT 编号链接到官方登记页；部分开始日期用公开镜像交叉核对，具体依据保存在 `start_date_type`。官方 API 端点尝试未能通过当前网页抓取工具访问，故未生成可复现的全量 API 导出或总命中数。
-
-ClinicalTrials.gov 由责任方提交记录；CTV 页面说明其数据来源于 ClinicalTrials.gov。登记信息不等于监管背书或临床疗效结论。
-
-**完整性：非穷尽。** 这是通过 ClinicalTrials.gov 与 Veeva CTV 定向发现并人工筛选的记录，并非完整 API 下载、完整中国试验目录或所有 2026 年更新肺癌试验。检索引擎和站内发现均可能漏项；当前不能据此报告“2026年前10个月共有多少条”。空字段表示本次没有可靠捕获，不表示官方登记缺少该字段。状态和招募地点会变化，使用前应打开来源页复核。
-
-## 核验统计（SQLite，2026-10-17）
-
-| 统计项 | 数量 | 口径 |
+| 指标 | 数量 | 说明 |
 | --- | ---: | --- |
-| 唯一登记记录 | 14 | NCT 编号 14 个，重复编号 0；SQLite `integrity_check` 为 `ok` |
-| 癌种/研究类型 | NSCLC 9；SCLC 4；肺癌筛查 1 | 筛查研究不是治疗试验 |
-| 2026 年开始 | 11 | `cohort=start_2026`；日期精度和实际/估计依据见逐条字段 |
-| 2026 年仅发布/更新、未归入 2026 开始组 | 3 | `cohort=posted_or_updated_2026`；3 条均有 2026 更新日期，其中 1 条另有 2026 首次发布日期 |
-| 发现入口 | ClinicalTrials.gov 9；Veeva CTV 5 | CTV 自述数据来源为 ClinicalTrials.gov，不能当作另一套独立注册库 |
+| API 总命中 / 返回 | 913 / 913 | 完整分页结果；当前只有一页 |
+| 肺癌相关候选 | 805 | 按登记标题和疾病条件字段筛选，NCT 去重后 805 条 |
+| 筛掉的非肺癌相关记录 | 108 | API 检索匹配但标题/疾病字段不满足肺癌相关筛选 |
+| SQLite 唯一记录 | 805 | NCT 重复数为 0；`PRAGMA integrity_check` 为 `ok` |
+| 癌种分类 | NSCLC 469；SCLC 81；混合 19；其他肺癌相关 236 | 分类互斥合计 805；“其他”保留未明确组织学或肺癌相关研究 |
+| 研究类型 | 介入性 631；观察性 171；扩大使用 3 | 不是全部都是治疗试验 |
+| 招募状态 | 招募中 390；尚未招募 340；进行中不招募 24；邀请招募 10；其余状态 41 | 截至查询快照；不能视为个人可入组名额 |
 
-其他字段捕获率：开始日期 11/14、阶段 13/14、招募状态 12/14、申办方 12/14、首次发布日 1/14、最近更新日 13/14；这些空值仅表示快照未捕获。14 条均有官方登记 URL。13 条记录的最近更新时间为 2026 年，但其中 10 条也属于“2026 年开始”组，因此不能把这些分组相加后称为 24 条不同的 2026 年新试验。
+805 是系统化登记字段筛选出的肺癌相关候选集合，不代表人工逐条复核、疗效证据等级、当前可入组数量或全球肺癌试验全量。结果含观察性、诊断/筛查、术后研究以及其他癌种中明确含肺癌队列的研究；按来源状态和癌种字段保留，供检索与讨论准备。
 
-**产品界面数字另计：**原型 v4.1.0 的本地演示列表共 28 条（快照 14 条 + 额外补充的历史登记 14 条）。后 14 条不是本 SQLite 数据集，也未作为本轮数据库统计核验；试验状态须打开登记页复核。v4 的 28 条只代表交互演示清单，不能报告为已爬取数据库记录数。
+## 来源与多通道口径
 
-## 表结构
+- 主数据来源是 [ClinicalTrials.gov API v2](https://clinicaltrials.gov/data-api/about-api)，每条记录保存 NCT 官方登记 URL、首次发布日期、最近更新、状态、阶段、申办方、干预、条件、地点及抓取时间。
+- Veeva ClinicalTrials.Veeva（CTV）已查验，用作患者友好的发现/浏览入口；[CTV 记录页说明其数据来源为 ClinicalTrials.gov](https://ctv.veeva.com/study/risk-adapted-proteomic-guided-systemic-therapy-for-previously-untreated-advanced-non-small-cell-lung-cancer)。因此 CTV 不是独立注册库，不能与 NCT 记录重复相加。
+- `unified_search_trials` 多源服务状态已核验：本地成功归档仅为胰腺癌快照（139 条、截止 2026-09-29）；肺癌相关的 chinadrugtrials 远端搜索为网络失败、ChiCTR/ICTRP/CTV 请求失败或未知错误、另一 ChiCTR 归档缺少本地路径。失败表示未获得数据，不能按 0 条记录统计。其他来源未形成可核验的肺癌计数，本数据库不混入臆测数据。
+- 官方 API 查询、拉取字段和数据库生成过程可由 [`scripts/build-trial-snapshot.py`](../../scripts/build-trial-snapshot.py) 复现。原始 API 响应采用最小必要公开字段，不抓取患者个人信息或公开联系人详细信息。
 
-- `metadata`: 检索日期、来源范围、完整性和用途声明。
-- `trials`: NCT 编号、癌种分型、阶段、状态、申办方、开始日期及日期依据、发布/更新日期、干预、官方登记页、检索发现来源和页面、分组和抓取时间。
-- `raw_record_json`: 本次保存字段的 JSON 形式，便于审计/再导入；不是登记页完整原始 JSON。
+## 解释边界
 
-只用于产品研究和就诊讨论准备，不用于治疗推荐、疗效比较、个人入组资格判断或替代医生意见。无需将患者身份信息与该库合并。
+筛选规则以标题/疾病条件中是否出现 NSCLC、non-small cell、SCLC、small-cell lung、lung cancer/carcinoma/neoplasm/adenocarcinoma 或 pulmonary cancer/carcinoma/neoplasm 为基础。该筛选用于召回，不等同研究者判读；“混合”表示记录同时包含小细胞和非小细胞相关词项。未纳入本快照不代表官方平台不存在该研究。当前招募状态与地点会变化，应打开官方记录复核。
 
-## 官方接口与方法参考
-
-- [ClinicalTrials.gov API 文档](https://clinicaltrials.gov/data-api/about-api)
-- [ClinicalTrials.gov 如何阅读研究记录](https://clinicaltrials.gov/study-basics/how-to-read-study-record)
-- 本快照逐条来源见数据库 `trials.source_url`。
+工作台只用于患者和照护者整理资料、准备就诊讨论，不提供诊断、治疗推荐、疗效比较或入组资格结论。

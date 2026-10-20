@@ -1,0 +1,46 @@
+<button class="prototype-ai-edge" id="prototype-ai-edge" data-action="prototype-ai-toggle" aria-label="打开 AI 对话栏" title="打开 AI 对话栏">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 3.6l1.85 4.55L18.4 10l-4.55 1.85L12 16.4l-1.85-4.55L5.6 10l4.55-1.85z"/></svg>
+  <small>AI 助手</small>
+</button>
+<div class="prototype-ai-scrim" id="prototype-ai-scrim" data-action="prototype-ai-close" aria-hidden="true"></div>
+<div id="prototype-ai-splitter" class="prototype-ai-splitter" role="separator" tabindex="0" aria-label="调整右侧 AI 对话栏宽度" aria-orientation="vertical" aria-valuemin="25" aria-valuemax="45" aria-valuenow="35" aria-valuetext="35%（25% 到 45%）" title="拖动调整宽度；左右键微调，Home/End 到边界，双击回到 35%" hidden><span class="prototype-ai-bubble" id="prototype-ai-bubble" aria-hidden="true">35%</span></div>
+<aside id="prototype-ai-pane" class="prototype-ai-pane" aria-label="DSH 原生 AI 对话栏示意" hidden>
+  <header class="prototype-ai-toolbar">
+    <div class="prototype-ai-head">
+      <div><b>DSH 原生 AI 对话</b><small id="prototype-ai-state">宿主模拟 · 未连接 DSH</small></div>
+      <button class="prototype-ai-hide" data-action="prototype-ai-close" aria-label="收起 AI 对话栏" title="收起后可从顶栏或右缘把手重新打开">隐藏 ×</button>
+    </div>
+    <div class="prototype-ai-widthbar">
+      <button id="prototype-agent-narrower" data-action="prototype-agent-narrower" title="缩窄 2%">− 缩窄</button>
+      <input id="prototype-ai-width" type="range" min="25" max="45" step="1" value="35" aria-label="AI 对话栏宽度百分比">
+      <output id="prototype-ai-width-value" aria-live="polite">35%</output>
+      <button id="prototype-agent-wider" data-action="prototype-agent-wider" title="加宽 2%">＋ 加宽</button>
+    </div>
+  </header>
+  <div class="prototype-ai-body">
+    <div class="prototype-ai-status-note">宿主模拟 · 未连接 DSH。真实 Desktop 中这一栏挂载原生 conversation 节点，此页只演示位置、宽度与开关。</div>
+    <div class="prototype-ai-meta">
+      <span><b>会话</b>Desktop 原生</span>
+      <span><b>模型</b>跟随会话</span>
+      <span><b>宽度</b><output id="prototype-ai-meta-width">35%</output></span>
+    </div>
+    <section class="prototype-ai-slot" aria-label="原生 conversation 组件挂载位置">
+      <span class="prototype-ai-slot-flag">宿主插槽 · 非真实会话</span>
+      <div class="prototype-ai-slot-head">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-8 8H5l-3 3v-11a9 9 0 1 1 18 0Z"/><path d="M7 10h8M7 14h5"/></svg>
+        <div><h3 id="prototype-ai-slot-title"></h3><p class="small muted" id="prototype-ai-slot-detail" role="status"></p></div>
+      </div>
+      <button id="prototype-ai-retry" class="btn small" data-action="prototype-ai-retry" hidden>重试状态示意</button>
+    </section>
+    <section class="prototype-ai-rules">
+      <b>这一栏不做什么</b>
+      <ul>
+        <li>不新建、不接管 DSH 会话；会话归属与复用由 Desktop 判断。</li>
+        <li>不自动发送，也不覆盖原生输入框里已有的草稿或附件。</li>
+        <li>不把回复写进病历，不把记录或截图当作治疗建议。</li>
+      </ul>
+    </section>
+    <p class="small muted">病例资料要先选择、预览并明确确认才带入原生对话；未核对候选、症状与私密心理记录不自动发送。</p>
+    <details><summary>宿主集成状态预览</summary><label for="prototype-ai-preview-state">仅预览设计状态，不实际连接</label><select id="prototype-ai-preview-state"><option value="unavailable">独立HTML · 未接入宿主</option><option value="loading">会话加载</option><option value="error">连接失败</option><option value="conflict">已有草稿 / 附件冲突</option></select></details>
+  </div>
+</aside>

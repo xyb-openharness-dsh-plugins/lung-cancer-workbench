@@ -1,0 +1,88 @@
+.wb-onepage-grid{display:grid;grid-template-columns:minmax(0,2.25fr) minmax(240px,1fr);gap:18px;align-items:start}.wb-onepage-grid .wb-stack{min-width:0}.wb-chart-row{display:grid;grid-template-columns:145px minmax(0,1fr);gap:14px;padding:16px 0;border-bottom:1px solid var(--line)}.wb-chart-row small{display:block;margin-top:6px}.wb-metric-latest{font-size:23px;font-variant-numeric:tabular-nums}.wb-chart-selects{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.wb-check-pill{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:24px;padding:5px 10px;font-size:.8em;background:var(--surface)}.wb-event-track{display:grid;gap:8px;margin-top:12px}.wb-event-chip{text-align:left;border:0;border-left:3px solid var(--orange);border-radius:0 9px 9px 0;background:var(--orange-soft);padding:10px 12px;line-height:1.5}.wb-event-chip b,.wb-event-chip small{display:block}.wb-event-chip small{color:var(--muted)}.wb-treatment-lanes{display:grid;gap:14px;margin:14px 0}.wb-lane{display:grid;grid-template-columns:170px minmax(0,1fr);gap:12px;align-items:center}.wb-lane small{display:block;font-size:.7em}.wb-lane b{font-size:.8em}.wb-lane-track{position:relative;height:24px;border-radius:6px;background:var(--blue-soft);overflow:hidden}.wb-lane-bar{position:absolute;top:3px;min-width:8px;height:18px;border:1px solid var(--blue);border-radius:6px;background:#a4cfe2}.wb-lane-bar.planned{background:var(--orange-soft);border:2px dashed var(--orange)}.wb-flip{min-height:190px;min-width:0}.wb-flip-inner{display:grid;min-height:190px}.wb-flip-face{position:relative;inset:auto;grid-area:1/1;display:flex;flex-direction:column;justify-content:space-between;gap:9px;min-width:0;overflow-wrap:anywhere;-webkit-backface-visibility:hidden;background:var(--surface)}.wb-flip-back{background:var(--blue-soft)}.wb-linechart{height:auto;min-height:150px;background:var(--surface);border:0}.wb-linechart circle{cursor:pointer}.wb-linechart circle:focus{stroke:var(--ink);stroke-width:3px}.wb-upload-zone{border:2px dashed #a8ccdd;background:var(--blue-soft);padding:18px;border-radius:14px;display:grid;gap:8px;margin:14px 0}.wb-upload-zone input[type=file]{max-width:100%;padding:8px;background:var(--surface);border-radius:8px}.wb-upload-result{overflow-wrap:anywhere;color:var(--blue)}.wb-archive-row{display:flex;gap:16px;justify-content:space-between;align-items:center}.wb-archive-row>div:first-child{min-width:0;overflow-wrap:anywhere}.wb-document-dialog{width:min(1320px,96vw)}.wb-document-columns{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:22px}.wb-document-preview{width:100%;max-height:460px;object-fit:contain;border:1px solid var(--line);border-radius:10px;background:var(--paper)}iframe.wb-document-preview{height:420px}.wb-parsed-text{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;font-size:.8em;max-height:380px;overflow:auto;padding:14px;background:var(--paper);border-radius:10px}.wb-candidate{border:1px solid var(--line);border-radius:12px;padding:14px;min-width:0}.wb-candidate .wb-form{gap:10px;margin-top:10px}.wb-document-footer{flex-shrink:0;border-top:1px solid var(--line);padding:14px 20px;display:flex;gap:12px;justify-content:space-between;align-items:center;background:var(--surface)}.wb-dialog{max-height:92vh;display:flex;flex-direction:column;overflow:hidden;background:var(--surface)}.wb-dialog>header,.wb-composer>header{padding:16px 20px;border-bottom:1px solid var(--line);flex-shrink:0}.wb-dialog-body{overflow:auto;min-height:0;padding:20px}.wb-composer{display:flex;flex-direction:column;max-height:92vh;min-height:0}.wb-document-footer .wb-agent-consent{font-size:.8em}.wb-file-link{overflow-wrap:anywhere}.wb-dialog-backdrop{z-index:1100}.wb-dialog .wb-actions{flex-wrap:wrap}.wb-dialog-body>p{margin-bottom:14px}.wb-onepage-grid .wb-card>h2{margin-bottom:12px}
+@container(max-width:1000px){.wb-onepage-grid{grid-template-columns:minmax(0,1fr)}.wb-onepage-grid>aside{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.wb-document-columns{grid-template-columns:minmax(0,1fr)}.wb-archive-row{align-items:flex-start;flex-direction:column}}
+@container(max-width:620px){.wb-chart-row{grid-template-columns:minmax(0,1fr)}.wb-lane{grid-template-columns:120px minmax(0,1fr)}.wb-document-footer{align-items:stretch;flex-direction:column}.wb-dialog-body{padding:14px}.wb-chart-selects{gap:5px}}
+@media(prefers-reduced-motion:reduce){.wb-flip-inner{transition:none}}
+.wb-timeline-workspace{display:grid;grid-template-columns:240px minmax(0,1fr);gap:18px;align-items:start}.wb-timeline-controls{display:grid;gap:13px;position:sticky;top:0}.wb-timeline-controls h2,.wb-timeline-controls h3{margin:0}.wb-metric-options{display:grid;gap:8px;min-width:0}.wb-metric-options label{border-radius:10px;align-items:flex-start;overflow-wrap:anywhere;line-height:1.5}.wb-timeline-main{min-width:0}.wb-plot-scroll{overflow-x:auto;max-width:100%;overscroll-behavior:contain}.wb-combined-chart{min-width:760px;width:100%;height:auto;overflow:visible}.wb-plot-legend{display:flex;flex-wrap:wrap;gap:9px;margin:12px 0;font-size:.75em;color:var(--muted)}.wb-plot-legend>div{border:1px solid var(--line);border-radius:9px;padding:8px}.wb-color-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:6px}.wb-event-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.wb-event-tag{display:flex;align-items:center;gap:9px;flex-wrap:wrap;min-height:44px;border:1px solid var(--line);background:var(--surface);border-radius:20px;padding:8px 14px;text-align:left;line-height:1.45;transition:background .16s,border-color .16s}.wb-event-tag:hover,.wb-event-tag.is-active{border-color:var(--blue);background:var(--blue-soft)}.wb-event-status{font-size:.8em;padding:3px 7px;border-radius:12px;background:#eef2f5;color:#496777;white-space:nowrap}.wb-event-status.actual,.wb-event-status.reported{background:var(--blue-soft);color:var(--blue)}.wb-event-status.planned{background:var(--orange-soft);color:#9b4613}.wb-event-status.discussion{background:#f0eef8;color:#625c83}.wb-graph-event{cursor:pointer;outline:none}.wb-graph-event.is-active text{font-weight:700;fill:var(--blue)}.wb-graph-event:focus>g>rect{stroke:#17638c;stroke-width:2;rx:8}.wb-event-hover{padding:9px;background:var(--blue-soft);border-radius:9px;font-size:.8em}.wb-animated-curve{stroke-dasharray:1;stroke-dashoffset:1;animation:lung-curve-draw .85s cubic-bezier(.3,.7,.3,1) forwards}.wb-measurement-dot{opacity:0;animation:lung-point-in .28s ease-out forwards}.wb-event-entrance{opacity:0;animation:lung-event-in .28s ease-out forwards}@keyframes lung-curve-draw{to{stroke-dashoffset:0}}@keyframes lung-point-in{from{opacity:.15;transform:scale(.4)}to{opacity:1;transform:scale(1)}}@keyframes lung-event-in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@container(max-width:960px){.wb-timeline-workspace{grid-template-columns:minmax(0,1fr)}.wb-timeline-controls{position:static}.wb-timeline-controls .wb-metric-options{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}}
+@media(prefers-reduced-motion:reduce){.wb-animated-curve{animation:none;stroke-dasharray:none;stroke-dashoffset:0}.wb-measurement-dot,.wb-event-entrance{animation:none;opacity:1;transform:none}.wb-flip-inner{transition:none}.wb-event-tag{transition:none}}
+.wb-timeline-workspace>.wb-timeline-controls{grid-column:auto}.wb-timeline-workspace>.wb-timeline-main{grid-column:auto}
+
+.wb-frame>.wb-shell{container-type:inline-size}.wb-ai-conversation{background:var(--surface)}
+/* Timeline stays on the standard light canvas, including when the shell theme is dark. */
+.wb-lung-cancer-workbench[data-theme] .wb-timeline-page{--paper:#f3f9fc;--surface:#fff;--ink:#203d50;--muted:#587383;--line:#d4e3eb;--blue:#17638c;--blue-soft:#e5f3f9;--orange:#e8873d;--orange-soft:#fff1e5;background:var(--paper);color:var(--ink);min-height:100%;color-scheme:light;border-radius:14px}
+.wb-lung-cancer-workbench[data-theme] .wb-timeline-page .wb-card,.wb-lung-cancer-workbench[data-theme] .wb-timeline-page .wb-flip-face,.wb-lung-cancer-workbench[data-theme] .wb-timeline-page .wb-button,.wb-lung-cancer-workbench[data-theme] .wb-timeline-page .wb-field input{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.wb-lung-cancer-workbench[data-theme] .wb-timeline-page .wb-button.soft{background:var(--blue-soft);color:var(--blue)}.wb-lung-cancer-workbench[data-theme] .wb-timeline-page .wb-button.primary{background:var(--blue);color:#fff}
+.wb-metric-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:14px}.wb-metric-cards .wb-flip{perspective:1000px;min-height:290px}.wb-metric-cards .wb-flip-inner{display:grid;min-height:290px;transform-style:preserve-3d;transition:transform .48s cubic-bezier(.3,.7,.3,1)}.wb-metric-cards .wb-flip[data-flipped=true] .wb-flip-inner{transform:rotateY(180deg)}.wb-metric-cards .wb-flip-face{grid-area:1/1;border:1px solid var(--line);border-radius:15px;padding:16px;backface-visibility:hidden;-webkit-backface-visibility:hidden;gap:8px;min-width:0}.wb-metric-cards .wb-flip-back{transform:rotateY(180deg);justify-content:flex-start}.wb-flip-trigger{display:flex;flex:1;min-width:0;width:100%;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:14px;padding:0;border:0;background:transparent;text-align:left;border-radius:10px;color:inherit;cursor:pointer}.wb-flip-trigger:focus-visible{outline:3px solid #63a8c9;outline-offset:5px}.wb-flip-hint{display:block;width:100%;padding:10px;border-radius:12px;background:var(--blue-soft);color:var(--blue);font-size:.8em;text-align:center}.wb-card-trend{display:block;flex:none;width:100%;height:auto;min-width:0;background:#fff;color:#203d50;overflow:visible}.wb-card-trend circle[role=button]{cursor:pointer}.wb-card-trend circle[role=button]:focus{stroke:#17638c;stroke-width:2}.wb-trend-caption{margin:0;font-size:11px;line-height:1.6}.wb-card-trend-empty{min-height:155px}.wb-metric-cards .wb-actions{margin-top:auto}
+@media(prefers-reduced-motion:reduce){.wb-metric-cards .wb-flip-inner{transition:none}}
+.reduce-motion .wb-metric-cards .wb-flip-inner{transition:none}
+
+.wb-metric-cards .wb-flip .wb-flip-trigger{padding:0;border:0;border-radius:10px;background:transparent;color:var(--ink);text-align:left;line-height:1.55}.wb-metric-cards .wb-flip-trigger:hover{background:transparent}.wb-metric-cards .wb-flip-trigger .wb-flip-hint{background:var(--blue-soft)}
+.wb-main:has(.wb-timeline-page),.prototype-ai-frame .main:has(.wb-timeline-page){background:#f3f9fc}
+
+/* Explicit light root also covers padding outside the timeline page. */
+.wb-lung-cancer-workbench[data-theme=light]{--paper:#f3f9fc;--surface:#fff;--ink:#203d50;--muted:#587383;--line:#d4e3eb;--blue:#17638c;--blue-soft:#e5f3f9;--orange-soft:#fff1e5;background:#f3f9fc;color:#203d50;color-scheme:light}
+/* Give timeline charts the full available width instead of a centered 1180px column. */
+.wb-main:has(.wb-timeline-page){padding:16px 16px 24px}
+.wb-lung-cancer-workbench .wb-timeline-page{width:100%;max-width:none;margin:0}
+.wb-timeline-page>.wb-head{margin-bottom:16px}
+.prototype-ai-frame .main:has(.wb-timeline-page){width:100%;max-width:none;margin:0;padding:16px 16px 24px}
+@container(max-width:619px){.wb-main:has(.wb-timeline-page),.prototype-ai-frame .main:has(.wb-timeline-page){padding:12px 12px 20px}}
+/* Timeline typography: one step smaller; preserve the value/title hierarchy. */
+.wb-lung-cancer-workbench .wb-timeline-page{font-size:14px}
+.wb-timeline-page .wb-head h1{font-size:27px}
+.wb-timeline-page .wb-card h2{font-size:17px}
+.wb-timeline-page .wb-small{font-size:11px}
+.wb-timeline-page .wb-plot-legend{font-size:11px}
+.wb-timeline-page .wb-trend-caption{font-size:10px}
+.wb-lung-cancer-workbench[data-font=large] .wb-timeline-page{font-size:17px}
+.wb-metric-cards .wb-flip{cursor:pointer;outline:none}.wb-metric-cards .wb-flip:focus-visible{outline:3px solid #63a8c9;outline-offset:3px;border-radius:15px}.wb-flip-summary{display:flex;flex:1;min-width:0;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:14px}.wb-flip-summary>.wb-small:last-child{align-self:flex-end;opacity:.85}
+/* 共用版式补全：与 lib/client-ui.js 的组件一一对应（表格、要点、体重折线、栅格列）。 */
+.wb-rail{grid-column:span 4;display:grid;gap:16px;align-content:start;min-width:0}
+.wb-maincol{grid-column:span 8;display:grid;gap:16px;min-width:0}
+.wb-card-table{min-width:0;overflow-x:auto}
+.wb-table{width:100%;border-collapse:collapse;font-size:.86em}
+.wb-table th,.wb-table td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.wb-table th{font-weight:650;font-size:.92em;color:var(--muted);white-space:nowrap;background:var(--blue-soft)}
+.wb-table tbody tr:last-child td{border-bottom:0}
+.wb-table td b{font-weight:700}
+.wb-plain-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.wb-plain-row:first-child{border-top:0}
+.wb-plain-row p{margin:2px 0 0;color:var(--muted);font-size:.86em}
+.wb-body-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.wb-body-row:first-child{border-top:0}
+.wb-body-main{min-width:0}
+.wb-body-main p{margin:3px 0 0;color:var(--muted);font-size:.86em;overflow-wrap:anywhere}
+.wb-bullets{margin:0;padding-left:18px;line-height:1.85;color:var(--ink)}
+.wb-bullets li{margin:2px 0}
+.wb-chip-row{display:flex;flex-wrap:wrap;gap:6px}
+.wb-segmented{display:inline-flex;gap:4px;padding:3px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+.wb-segmented button{border:0;background:transparent;border-radius:999px;padding:5px 11px;font-size:.82em;min-height:32px}
+.wb-segmented button[aria-pressed=true]{background:var(--blue-soft);color:var(--blue);font-weight:650}
+.wb-priority-list{display:grid;gap:8px}
+.wb-priority{display:flex;gap:10px;align-items:flex-start;border-left:3px solid var(--orange);padding:9px 11px;background:#fff8f1;border-radius:0 11px 11px 0;margin:0}
+.wb-priority-num{flex:none;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--orange-soft);color:#965322;font-size:.78em;font-weight:700}
+.wb-priority p{margin:2px 0 0;color:var(--muted);font-size:.85em}
+.wb-key-list{display:grid;gap:0}
+.wb-dashboard-section{display:grid;gap:0}
+.wb-task-desc{color:var(--muted);font-size:.84em;line-height:1.45}
+.wb-task-arrow{align-self:flex-end;color:var(--blue);font-size:.9em}
+.wb-eyebrow{display:inline-block;font-size:.78em;letter-spacing:.06em;color:var(--blue);text-transform:none;margin-bottom:4px}
+.wb-hero-copy{min-width:0}
+.wb-hero-next{display:grid;gap:6px;align-content:start}
+.wb-nowrap{white-space:nowrap}
+.wb-cfg-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.wb-cfg-row:first-child{border-top:0}
+.wb-cfg-row p{margin:2px 0 0;color:var(--muted);font-size:.86em}
+.wb-weight-svg{width:100%;max-width:100%;height:auto;background:var(--surface);border-radius:12px}
+.wb-weight-svg text{font-size:11px;fill:var(--muted)}
+.wb-weight-svg circle{fill:var(--blue);stroke:var(--surface);stroke-width:1.6}
+.wb-wgrid{stroke:var(--line);stroke-width:1}
+.wb-wcurve{fill:none;stroke:var(--blue);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+@container(max-width:1000px){.wb-rail,.wb-maincol{grid-column:span 12}}
+@container(max-width:620px){.wb-table{font-size:.8em}.wb-table th,.wb-table td{padding:7px 8px}}
+.wb-lung-cancer-workbench[data-theme=dark] .wb-priority{background:#423729;color:#f1d1aa}
+.wb-lung-cancer-workbench[data-theme=dark] .wb-table th{background:#22414f;color:#cfe4ee}
+.wb-lung-cancer-workbench[data-theme=dark] .wb-weight-svg,.wb-lung-cancer-workbench[data-theme=dark] .wb-segmented{background:var(--surface)}
+.wb-table td:first-child{white-space:nowrap}
+.wb-table .wb-tag{white-space:nowrap}
+.wb-maincol .wb-dashboard-stat-grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}

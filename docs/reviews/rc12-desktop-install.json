@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-20",
+  "version": "0.1.2-rc.12",
+  "DSH_HOME": "/Users/qinxiaoqiang/Library/Application Support/dsh-desktop/harness",
+  "profile": "web",
+  "dependency": "file:/Users/qinxiaoqiang/Downloads/lung-cancer-workbench/release/xyb-openharness-dsh-plugins-lung-cancer-workbench-0.1.2-rc.12.tgz",
+  "tarballSha256": "9e222210415107980c7af96a86d813b04f19f49f378831e0d5a627b5724d545a",
+  "installedClientSha256": "d2d44bbe8fac580a4daaa6d882652e3a67c537770d65681551a6d485d18cd360",
+  "sourceClientSha256": "d2d44bbe8fac580a4daaa6d882652e3a67c537770d65681551a6d485d18cd360",
+  "checks": {
+    "version": true,
+    "VERSION": true,
+    "clientByteEquality": true,
+    "sqliteByteEquality": true,
+    "tests": "49/49",
+    "hostEntryImport": "passed with Desktop Node v24.17.0"
+  },
+  "restart": "manual; no app restart performed",
+  "desktopVisualAcceptance": "pending",
+  "browserAcceptance": "1280px/700px; labelled synthetic conversation fixture; not real host acceptance"
+}

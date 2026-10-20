@@ -51,6 +51,12 @@ test('unknown date is explicit and molecular outcomes never default to negative'
   assert.equal(file.records[0].data.status, 'insufficient')
 })
 
+test('molecular test may explicitly have an unknown specimen without inventing an identifier', () => {
+  const file = appendRecord(base(), recordInput({ data: { specimenId: null, testTypeText: 'NGS', status: 'pending' } }), { expectedRevision: 0 })
+  assert.equal(file.records[0].data.specimenId, null)
+  assert.equal(file.records[0].data.specimenReferenceState, 'unknown')
+})
+
 test('planned treatment remains planned and performed treatment is explicit', () => {
   let file = base()
   file = appendRecord(file, recordInput({ kind: 'radiotherapy', data: { status: 'scheduled', fractionText: '计划分次（演示）' } }), { expectedRevision: 0 })

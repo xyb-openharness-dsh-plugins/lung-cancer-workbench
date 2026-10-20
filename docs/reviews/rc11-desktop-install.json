@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-20",
+  "application": "/Applications/DSH Desktop.app",
+  "bundleId": "io.dsh.desktop",
+  "appVersion": "0.12.0",
+  "DSH_HOME": "/Users/qinxiaoqiang/Library/Application Support/dsh-desktop/harness",
+  "profile": "web",
+  "previousVersion": "0.1.2-rc.8",
+  "version": "0.1.2-rc.11",
+  "dependency": "file:/Users/qinxiaoqiang/Downloads/lung-cancer-workbench/release/xyb-openharness-dsh-plugins-lung-cancer-workbench-0.1.2-rc.11.tgz",
+  "installedRealPath": "/Users/qinxiaoqiang/Library/Application Support/dsh-desktop/harness/profiles/web/node_modules/@xyb-openharness-dsh-plugins/lung-cancer-workbench",
+  "tarballSha256": "e3457e90ab01fb367d06b903c6b805b4a5a42c7dd562350044bc43979ec57c3a",
+  "sourceClientSha256": "daa5c3da6ca5d76e148d9d1183636b541cb775044d34362598888c0a7345d257",
+  "installedClientSha256": "daa5c3da6ca5d76e148d9d1183636b541cb775044d34362598888c0a7345d257",
+  "sqliteSha256": "5478fc93317b5d33d3485830ccaa1824091c6f23a675189a02aa4f0336816306",
+  "checks": {
+    "packageVersion": true,
+    "VERSION": true,
+    "clientByteEquality": true,
+    "sqliteByteEquality": true,
+    "profileDependency": true,
+    "automaticTests": "49/49",
+    "prototypeBaselineUnchanged": true,
+    "hostEntryImport": {
+      "passed": true,
+      "node": "v24.17.0",
+      "name": "lung-cancer-workbench-main",
+      "inject": [
+        "webServer",
+        "connection"
+      ]
+    }
+  },
+  "restart": "manual by developer; no restart performed",
+  "desktopVisualAcceptance": "pending after manual restart",
+  "installExitCode": 0,
+  "installNotes": "pnpm emitted peer dependency warnings; Desktop runner restored 10 generation projections. Entry imported successfully with Desktop bundled Node v24.17.0 (Electron also logged a macOS task_name_for_pid warning)."
+}

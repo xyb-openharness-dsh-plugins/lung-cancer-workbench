@@ -1,6 +1,6 @@
 {
   "name": "@xyb-openharness-dsh-plugins/lung-cancer-workbench",
-  "version": "0.1.0",
+  "version": "0.1.2-rc.15",
   "description": "面向肺癌患者与照护者的本机资料、就诊准备与综合照护工作台（开发中，未发布）",
   "private": true,
   "type": "module",
@@ -13,6 +13,7 @@
     "./cordis.patch.yml": "./cordis.patch.yml"
   },
   "files": [
+    "VERSION",
     "dsh",
     "lib",
     "assets",
@@ -21,6 +22,7 @@
     "NOTICE.md"
   ],
   "scripts": {
+    "build": "node scripts/embed-client-logo.mjs",
     "check": "node --check dsh/index.js && node --check lib/client.js && node scripts/check-workbench-package.mjs .",
     "test": "node --test",
     "pack:check": "npm pack --dry-run"
@@ -42,12 +44,12 @@
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": ">=4.0.1 <5",
-    "@deepseek-ai/dsh-client-connection": ">=0.1.0-rc.0 <0.3.0-0",
-    "@deepseek-ai/dsh-host-webserver": ">=0.1.0-rc.0 <0.3.0-0",
+    "@deepseek-ai/dsh-client-connection": ">=0.2.0-rc.2 <0.3.0-0",
+    "@deepseek-ai/dsh-host-webserver": ">=0.2.0-rc.2 <0.3.0-0",
     "@deepseek-ai/schemastery": ">=3.18.1 <4"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=22.13"
   },
   "license": "UNLICENSED"
 }

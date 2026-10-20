@@ -23,8 +23,10 @@ async function file(path) {
 }
 try {
   const p=JSON.parse(await readFile(resolve(root,'package.json'),'utf8'))
+  const version=String(await readFile(resolve(root,'VERSION'),'utf8')).trim()
   check(typeof p.name==='string' && /^(?:@[a-z0-9][a-z0-9._-]*\/)?[a-z0-9][a-z0-9._-]*$/.test(p.name),'Valid npm name required')
   check(typeof p.version==='string' && /^\d+\.\d+\.\d+(?:-[\da-zA-Z.-]+)?(?:\+[\da-zA-Z.-]+)?$/.test(p.version),'Full semver required')
+  check(version===p.version,'VERSION must match package.json version')
   check(p.main===p.exports?.['.'],'main must match exports["."]')
   const server=await file(p.exports?.['.'])
   const client=await file(p.exports?.['./client'])
@@ -32,6 +34,8 @@ try {
   check(p.dsh?.client?.platform==='web','dsh.client.platform must be web')
   check(p.dsh?.client?.inject?.includes('dsh-desktop-workbenches'),'Missing client inject dsh-desktop-workbenches')
   check(/window\.__ModuleLoader__\.load\s*\(/.test(client),'Client loader missing')
+  check(client.includes(`const VERSION = '${version} · 开发中'`),'Client visible version must match VERSION')
+  check(client.includes('data:image/png;base64,'),'Client must embed the brand logo for the single-file loader')
   const id=client.match(/(?:['"]?id['"]?)\s*:\s*(['"])(.*?)\1/)
   check(id?.[2]===p.name,'Client loader id must match npm name')
   check(/desktopWorkbenches\.register\s*\(/.test(client),'desktopWorkbenches.register missing')

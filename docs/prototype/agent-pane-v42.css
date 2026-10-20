@@ -1,0 +1,81 @@
+/* Native conversation mount location; this HTML is a host integration state preview.
+   v4.2.6: 调起按钮 + 右缘把手 + 可拖动左缘 + 窄窗抽屉。 */
+.prototype-ai-frame{display:flex;min-width:0;min-height:0;height:calc(100dvh - 32px);overflow:hidden;position:relative}
+.prototype-ai-frame>.workspace{display:grid;grid-template-columns:216px minmax(0,1fr);flex:1 1 auto;min-width:0;min-height:0;height:100%;overflow:hidden;container-type:inline-size}
+.prototype-ai-frame .workspace>.sidebar{display:flex;position:relative;top:auto;height:100%;min-height:0;overflow:auto;border-right:1px solid var(--line);border-bottom:0;padding:18px 14px;gap:7px}
+.prototype-ai-frame .workspace .profile{display:flex}.prototype-ai-frame .workspace .nav{display:grid;gap:3px;overflow:visible;margin:2px 0 0;padding:0}.prototype-ai-frame .workspace .nav-button{width:100%;min-height:40px;padding:7px 10px;font-size:12px;white-space:normal}.prototype-ai-frame .workspace .sidebar-bottom{display:block}
+.prototype-ai-frame .work-area{min-width:0;min-height:0;height:100%;display:flex;flex-direction:column;overflow:hidden}.prototype-ai-frame .topbar{position:relative;flex:none;flex-wrap:wrap;padding:10px 16px;gap:8px}.prototype-ai-frame .main{min-height:0;overflow:auto;overscroll-behavior:contain}.prototype-ai-frame .footer{flex:none}
+
+/* 顶栏调起按钮：收起时描边，展开时实心，两种状态都只有一个入口 */
+.prototype-ai-toggle{display:inline-flex;align-items:center;gap:7px;min-height:34px;padding:7px 12px;border:1px solid #b9d6e4;border-radius:10px;background:#fff;color:#1d5b7c;font-size:12.5px;font-weight:650;line-height:1;transition:background .15s,border-color .15s,color .15s}
+.prototype-ai-toggle svg{width:16px;height:16px;flex:none}
+.prototype-ai-toggle:hover{background:#f0f9fd;border-color:#8ebfd6;color:#124a68}
+.prototype-ai-toggle[aria-expanded="true"]{background:#177a9c;border-color:#177a9c;color:#fff}
+.prototype-ai-toggle[aria-expanded="true"]:hover{background:#12657f;border-color:#12657f;color:#fff}
+
+/* 收起态：右缘竖排把手，任何页面都能一键调起 */
+.prototype-ai-edge{position:absolute;right:0;top:50%;transform:translateY(-50%);z-index:12;display:grid;justify-items:center;gap:6px;padding:11px 6px;border:1px solid #c3dbe7;border-right:0;border-radius:11px 0 0 11px;background:#fff;color:#1d6c8f;box-shadow:-3px 0 12px #173e4d14;transition:background .15s,box-shadow .15s}
+.prototype-ai-edge svg{width:15px;height:15px}
+.prototype-ai-edge small{writing-mode:vertical-rl;text-orientation:mixed;font-size:10.5px;letter-spacing:.16em;color:#2b6c8b}
+.prototype-ai-edge:hover{background:#eaf6fb;box-shadow:-3px 0 14px #173e4d22}
+.prototype-ai-edge[hidden]{display:none!important}
+
+/* 面板与抽屉遮罩 */
+.prototype-ai-pane{display:flex;flex:0 0 35%;flex-direction:column;min-width:0;min-height:0;height:100%;border-left:1px solid var(--line);background:var(--white);color:var(--ink);overflow:hidden}
+.prototype-ai-pane[hidden],.prototype-ai-splitter[hidden]{display:none!important}
+.prototype-ai-scrim{position:absolute;inset:0;z-index:21;background:#0f2c3a4d;border:0;padding:0}
+.prototype-ai-scrim[hidden]{display:none!important}
+.prototype-ai-narrow>.prototype-ai-pane{position:absolute;z-index:22;top:0;right:0;bottom:0;width:min(420px,92%);height:100%;flex:0 0 auto!important;box-shadow:-8px 0 30px #12303f2e}
+.prototype-ai-narrow>.prototype-ai-splitter{display:none!important}
+
+/* 面板头：标题 + 隐藏 + 宽度控制（缩窄 / 滑杆 / 百分比 / 加宽） */
+.prototype-ai-toolbar{padding:12px 14px;border-bottom:1px solid var(--line);background:var(--white);display:grid;gap:9px;flex:none}
+.prototype-ai-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.prototype-ai-head b{display:block;font-size:14.5px;letter-spacing:.01em}
+.prototype-ai-head small{display:block;margin-top:2px;font-size:11.5px;color:var(--muted)}
+.prototype-ai-hide{border:1px solid var(--line);border-radius:9px;background:#fff;padding:5px 9px;font-size:11.5px;color:#3c5d70;white-space:nowrap}
+.prototype-ai-hide:hover{border-color:#dcae92;color:#9c5a29;background:#fff8f2}
+.prototype-ai-widthbar{display:grid;grid-template-columns:auto minmax(40px,1fr) auto auto;align-items:center;gap:8px;font-size:11.5px;color:var(--muted)}
+.prototype-ai-widthbar button{border:1px solid var(--line);border-radius:8px;background:#fff;padding:4px 8px;font-size:11px;white-space:nowrap;color:#3c5d70;min-height:26px}
+.prototype-ai-widthbar button:hover:not(:disabled){border-color:#9fc6d8;color:#124a68}
+.prototype-ai-widthbar button:disabled{opacity:.42;cursor:not-allowed}
+.prototype-ai-widthbar input[type=range]{width:100%;min-width:0;margin:0;accent-color:#177a9c}
+.prototype-ai-widthbar output{min-width:36px;text-align:right;font-weight:650;color:#284f63;font-variant-numeric:tabular-nums}
+
+/* 面板正文 */
+.prototype-ai-body{flex:1;min-height:0;overflow:auto;padding:16px;background:var(--white);display:flex;flex-direction:column;gap:14px}
+.prototype-ai-body p{margin:0;line-height:1.7}
+.prototype-ai-status-note{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--sky);font-size:12px}
+.prototype-ai-meta{display:flex;flex-wrap:wrap;gap:6px}
+.prototype-ai-meta span{display:inline-flex;align-items:baseline;gap:5px;border:1px solid var(--line);border-radius:999px;padding:3px 9px;background:#fff;font-size:11px;color:#40606f}
+.prototype-ai-meta b{font-size:10.5px;color:var(--muted);font-weight:600}
+.prototype-ai-meta output{font-weight:650;font-variant-numeric:tabular-nums}
+.prototype-ai-slot{padding:16px;border:1px dashed #a6cddf;border-radius:14px;background:linear-gradient(#f6fbfd,#fff);text-align:left;display:grid;gap:10px}
+.prototype-ai-slot-flag{justify-self:start;border-radius:999px;padding:2px 8px;background:#fff2e2;color:#8d5a1d;font-size:10.5px;font-weight:650}
+.prototype-ai-slot-head{display:flex;gap:10px;align-items:flex-start}
+.prototype-ai-slot-head svg{width:26px;height:26px;flex:none;margin-top:2px;color:#1d6c8f}
+.prototype-ai-slot h3{font-size:14.5px;margin:0 0 3px}
+.prototype-ai-slot-detail,.prototype-ai-slot p{font-size:12px;line-height:1.6;color:var(--muted);margin:0}
+.prototype-ai-slot .btn{justify-self:start}
+.prototype-ai-rules{border:1px solid var(--line);border-radius:12px;background:#fbfdfe;padding:12px 13px;display:grid;gap:6px}
+.prototype-ai-rules b{font-size:12px;color:#2f5468}
+.prototype-ai-rules ul{margin:0;padding-left:16px;display:grid;gap:4px}
+.prototype-ai-rules li{font-size:11.5px;line-height:1.6;color:var(--muted)}
+.prototype-ai-body details{margin-top:auto;font-size:12px}
+.prototype-ai-body details select{margin-top:10px;width:100%;padding:8px;border:1px solid var(--line);background:var(--white);color:var(--ink);border-radius:8px}
+
+/* 左缘拖动条：16px 命中区 + 中缝 + 拖动中的百分比气泡 */
+.prototype-ai-splitter{position:relative;z-index:6;flex:0 0 16px;margin:0 -8px;touch-action:none;cursor:col-resize;outline:none}
+.prototype-ai-splitter:after{content:'';position:absolute;left:6px;top:0;bottom:0;width:4px;border-radius:4px;background:#a4cfe2;transition:background .15s}
+.prototype-ai-splitter:before{content:'⋮';position:absolute;z-index:1;left:0;top:50%;transform:translateY(-50%);width:16px;height:44px;border:1px solid var(--line);border-radius:8px;background:var(--white);color:var(--blue);font-size:20px;text-align:center;line-height:40px;pointer-events:none}
+.prototype-ai-splitter:focus-visible:after,.prototype-ai-splitter:hover:after{background:var(--blue)}
+.prototype-ai-splitter:hover:before,.prototype-ai-splitter:focus-visible:before{background:#eaf6fb;border-color:#8ebfd6}
+.prototype-ai-bubble{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;padding:3px 8px;border-radius:999px;background:#123b4d;color:#fff;font-size:11px;font-variant-numeric:tabular-nums;opacity:0;transition:opacity .12s;pointer-events:none}
+.prototype-ai-dragging,.prototype-ai-dragging *{cursor:col-resize!important;user-select:none!important}.prototype-ai-dragging iframe{pointer-events:none}
+.prototype-ai-dragging .prototype-ai-bubble{opacity:1}
+
+@container(max-width:760px){.prototype-ai-frame .workspace>.sidebar{padding:14px 10px}.prototype-ai-frame .workspace>.work-area .topbar{align-items:flex-start}.prototype-ai-frame .workspace>.work-area .breadcrumb{flex-basis:100%}.prototype-ai-frame .workspace>.work-area .top-actions{width:100%;justify-content:flex-start}.prototype-ai-frame .workspace .hero,.prototype-ai-frame .workspace .g2,.prototype-ai-frame .workspace .g2e{grid-template-columns:minmax(0,1fr)}.prototype-ai-frame .workspace .g3,.prototype-ai-frame .workspace .g4{grid-template-columns:repeat(2,minmax(0,1fr))}.prototype-ai-frame .workspace .task-grid{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}}
+@container(max-width:619px){.prototype-ai-frame .workspace>.sidebar{padding:12px 5px}.prototype-ai-frame .workspace .brand{justify-content:center}.prototype-ai-frame .workspace .brand-text,.prototype-ai-frame .workspace .profile-body,.prototype-ai-frame .workspace .caret,.prototype-ai-frame .workspace .nav-label,.prototype-ai-frame .workspace .nav-count,.prototype-ai-frame .workspace .sidebar-bottom{display:none}.prototype-ai-frame .workspace .profile{padding:6px;justify-content:center}.prototype-ai-frame .workspace .nav-button{justify-content:center;padding:8px 4px}.prototype-ai-frame .workspace .g3,.prototype-ai-frame .workspace .g4{grid-template-columns:minmax(0,1fr)}}
+@media(prefers-reduced-motion:reduce){.prototype-ai-frame *{scroll-behavior:auto!important}.prototype-ai-splitter:after{transition:none}.prototype-ai-bubble{transition:none}}
+
+.prototype-ai-frame [hidden]{display:none!important}

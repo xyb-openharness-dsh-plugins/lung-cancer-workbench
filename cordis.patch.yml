@@ -1,3 +1,5 @@
 - insert:
     - id: lung-cancer-workbench-main
       name: "@xyb-openharness-dsh-plugins/lung-cancer-workbench"
+      config:
+        root: !!js dshHomePath('lung-cancer-workbench')

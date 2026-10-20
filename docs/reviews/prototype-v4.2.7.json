@@ -1,0 +1,13 @@
+{
+  "version": "4.2.7",
+  "date": "2026-10-20",
+  "file": "docs/prototype/lung-workbench-v4.2.7.html",
+  "sha256": "6e1d136b2c532e665af370d28aa6b79c423d77b47ddb47e644d47196c3e18b31",
+  "status": "awaiting developer prototype review",
+  "baselineUnchanged": true,
+  "prototypeScriptCheck": "passed",
+  "browserConsole": "0 errors / 0 warnings in final session",
+  "starterTests": "24/24",
+  "productionRelease": "0.1.2-rc.13 dense timeline repair only",
+  "latestFeedback": "metric selector shows short names only; full identity in tooltip/accessibility label"
+}

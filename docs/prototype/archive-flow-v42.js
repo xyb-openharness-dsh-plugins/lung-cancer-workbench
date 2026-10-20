@@ -1,0 +1,50 @@
+const archiveDemo={files:[],outputs:[],tab:'imports',returnToRecord:false,recordDraft:null,error:''};
+const archiveAccept='.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.rtf,.txt,.md,.csv,.json,.html,.htm,.png,.jpg,.jpeg,.webp,.gif,.bmp,.tif,.tiff,.heic,.heif';
+const archiveFiles=()=>archiveDemo.files.filter(f=>f.owner===state.profile);
+function recordUploadBlock(){return `<div class="field full"><div class="archive-upload-box"><div class="row"><div><b>有报告或照片？直接从文件开始</b><p class="small muted">上传文件 → 解析 → 核对 → 保存</p></div><button class="btn primary" type="button" data-action="archive-choose" data-input="record-prototype-upload">＋ 上传文件</button></div><input hidden id="record-prototype-upload" type="file" multiple accept="${archiveAccept}"><p class="field-help">支持PDF、Word、Excel、PPT及常见图片（含HEIC/HEIF），每份20MB以内。此HTML只演示流程，文件留在当前页面，刷新后清除。</p>${archiveFiles().length?`<button class="btn" type="button" data-action="archive-open-from-record">查看已选择文件（${archiveFiles().length}）</button>`:''}</div></div>`}
+function archiveKeepRecord(){const form=document.querySelector('#record-form');if(form)archiveDemo.recordDraft=Object.fromEntries(new FormData(form));archiveDemo.returnToRecord=!!form}
+function archiveBack(){if(archiveDemo.returnToRecord){recordModal();for(const [key,value] of Object.entries(archiveDemo.recordDraft||{})){const input=document.querySelector(`#record-form [name="${key}"]`);if(input)input.value=value}}else{closeModal();render()}}
+function archivePage(){
+  const imports=archiveFiles().map(f=>`<div class="card"><div class="row"><div><b>${esc(f.name)}</b><p class="small muted">${Math.ceil(f.file.size/1024)}KB · ${esc(f.status)} · ${f.saved?'已保存模拟记录':'尚未保存为记录'}</p></div><button class="btn" data-action="archive-preview" data-id="${f.id}">${f.saved?'查看原件与记录':'继续解析 / 核对'}</button></div></div>`).join('');
+  const outputs=archiveDemo.outputs.filter(f=>f.owner===state.profile).map(f=>`<div class="card row"><b>${esc(f.name)}</b><a class="btn" href="${f.url}" download="${esc(f.name)}">下载模拟输出</a></div>`).join('');
+  return head('档案管理','原件、候选、已保存记录和输出文件可回查。此HTML只保存在页面内存中，刷新后清除。')+`<div class="row" style="margin-bottom:16px"><button class="btn ${archiveDemo.tab==='imports'?'primary':''}" data-action="archive-tab" data-tab="imports">导入原件</button><button class="btn ${archiveDemo.tab==='exports'?'primary':''}" data-action="archive-tab" data-tab="exports">导出文件</button></div>`+(archiveDemo.tab==='imports'?`<div class="card archive-upload-box"><div class="row"><div><h2>添加报告或照片</h2><p class="small muted">主流文档、图片，含HEIC/HEIF · 每份20MB以内</p></div><button class="btn primary" data-action="archive-choose" data-input="archive-prototype-input">＋ 上传文件</button></div><input hidden id="archive-prototype-input" type="file" multiple accept="${archiveAccept}"></div><div class="stack" style="margin-top:16px">${imports||'<div class="empty">选择文件后进入解析、核对和保存流程。</div>'}</div>`:`<div class="stack">${outputs||'<div class="empty">核对保存后，可生成并下载JSON模拟输出。</div>'}</div>`)
+}
+function archiveCapture(){const f=archiveDemo.files.find(f=>f.id===document.querySelector('#archive-current')?.value&&f.owner===state.profile);if(!f)return;for(const key of ['title','date','text','type']){const input=document.querySelector('#archive-edit-'+key);if(input)f[key]=input.value}const checked=document.querySelector('#archive-reviewed');if(checked)f.reviewed=checked.checked}
+function archivePrototypeModal(id){
+  const f=archiveFiles().find(x=>x.id===id);if(!f)return;
+  const index=archiveFiles().indexOf(f),step=f.saved?4:f.parsed?3:2;
+  const steps=`<ol class="archive-steps" aria-label="导入步骤">${['上传文件','解析','核对','保存'].map((name,i)=>`<li ${step===i+1?'aria-current="step"':''}>${i+1}. ${name}</li>`).join('')}</ol>`;
+  const image=/\.(png|jpe?g|webp|gif)$/i.test(f.name)?`<img class="archive-file-preview" src="${f.url}" alt="所选图片原件预览">`:/\.hei[cf]$/i.test(f.name)?'<div class="info-box">已保留HEIC原件。此原型不转换HEIC；正式产品生成预览副本，原件不改动。</div>':'<div class="info-box">原件已选入当前页面；可以下载回查。文档内容不作为可执行HTML展示。</div>';
+  const nav=archiveFiles().map((item,i)=>`<button class="btn ${item.id===id?'primary':''}" data-action="archive-preview" data-id="${item.id}">${i+1}. ${esc(item.name)}</button>`).join('');
+  const candidate=f.parsed?`<div class="form-grid"><div class="field"><label for="archive-edit-type">记录类型</label><select id="archive-edit-type" ${f.saved?'disabled':''}>${['病理或分子检测','检验 / 指标','影像检查','治疗 / 用药','放射治疗','手术记录','穿刺 / 标本流转'].map(type=>`<option ${type===f.type?'selected':''}>${type}</option>`).join('')}</select></div><div class="field"><label for="archive-edit-date">报告日期（未知可空，不进入日期轴）</label><input id="archive-edit-date" type="date" value="${esc(f.date||'')}" ${f.saved?'disabled':''}></div><div class="field full"><label for="archive-edit-title">记录标题</label><input id="archive-edit-title" value="${esc(f.title)}" ${f.saved?'disabled':''}></div><div class="field full"><label for="archive-edit-text">转录内容 · 对照原件核对</label><textarea id="archive-edit-text" style="min-height:150px" ${f.saved?'disabled':''}>${esc(f.text)}</textarea><p class="field-help">${f.local?'此处为本机读取的文本；尚未核实类型、日期或医学含义。':'当前为标明的演示候选，未实际OCR/解析所选文档。可手动输入内容以演示核对流程。'}</p></div></div><label class="check-pill"><input id="archive-reviewed" type="checkbox" ${f.reviewed?'checked':''} ${f.saved?'disabled':''}>我已对照原件核对并选择这条转录记录</label>`:`<p>原件选择完成。解析后内容先进入候选，核对保存后才成为模拟记录。</p><p class="small muted">文本文件可在本机读取；PDF、Office和图片在本原型中仅生成演示候选，不会发送至云端。</p>`;
+  modal('上传文件与整理记录',`<input type="hidden" id="archive-current" value="${id}">${steps}<div class="archive-file-tabs">${nav}</div><div class="grid g2e"><section class="stack"><h3>原件 · ${esc(f.name)}</h3>${image}<a class="btn" href="${f.url}" download="${esc(f.name)}">下载原件</a><p class="small muted">第${index+1}份 / 共${archiveFiles().length}份 · ${Math.ceil(f.file.size/1024)}KB</p>${f.saved?'<div class="info-box">已保存到当前病例的模拟记录；可在档案管理回查并下载输出。</div>':''}</section><section class="stack"><h3>${f.saved?'已保存记录':f.parsed?'核对候选':'开始解析'}</h3>${candidate}<p id="archive-flow-error" role="alert" class="archive-flow-error">${esc(archiveDemo.error)}</p></section></div>`, `<button class="btn" data-action="archive-back">${archiveDemo.returnToRecord?'返回记录':'关闭'}</button>${f.saved?`<button class="btn primary" data-action="archive-done">查看档案管理</button>`:f.parsed?`<button class="btn primary" data-action="archive-confirm" data-id="${id}">核对并保存（模拟）</button>`:`<button class="btn primary" data-action="archive-parse" data-id="${id}">解析预览</button>`}`,'文件整理 · 页面内存模拟');
+}
+async function archiveAddFiles(files){
+  const accepted=[],errors=[];
+  for(const file of Array.from(files||[])){const ext='.'+file.name.split('.').pop().toLowerCase();if(!file.size||file.size>20*1024*1024){errors.push(file.name+'：请选择0–20MB以内的非空文件');continue}if(!archiveAccept.split(',').includes(ext)){errors.push(file.name+'：暂不支持此格式');continue}const duplicate=archiveFiles().find(f=>f.name===file.name&&f.file.size===file.size&&f.file.lastModified===file.lastModified);if(duplicate){accepted.push(duplicate);continue}const f={id:crypto.randomUUID(),owner:state.profile,name:file.name,file,url:URL.createObjectURL(file),status:'原件待解析',parsed:false,saved:false,reviewed:false,date:'',title:file.name.replace(/\.[^.]+$/,''),type:'病理或分子检测',text:''};archiveDemo.files.push(f);accepted.push(f)}
+  archiveDemo.error=errors.join('；');if(accepted.length)archivePrototypeModal(accepted[0].id);else if(errors.length)toast(errors.join('；'));
+}
+document.addEventListener('change',e=>{if(['archive-prototype-input','record-prototype-upload'].includes(e.target.id)){if(e.target.id==='record-prototype-upload')archiveKeepRecord();else archiveDemo.returnToRecord=false;archiveAddFiles(e.target.files)}if(e.target.id?.startsWith('archive-edit-')||e.target.id==='archive-reviewed')archiveCapture()});
+document.addEventListener('input',e=>{if(e.target.id?.startsWith('archive-edit-'))archiveCapture()});
+document.addEventListener('click',async e=>{
+  const target=e.target.closest('[data-action]');if(!target)return;const a=target.dataset.action,id=target.dataset.id;
+  if(a==='archive-choose'){if(target.dataset.input==='record-prototype-upload')archiveKeepRecord();document.getElementById(target.dataset.input)?.click();return}
+  if(a==='archive-open-from-record'){archiveKeepRecord();archivePrototypeModal(archiveFiles().at(-1)?.id);return}
+  if(a==='archive-tab'){archiveDemo.tab=target.dataset.tab;render();return}
+  if(a==='archive-preview'){archiveCapture();if(!document.querySelector('#archive-current'))archiveDemo.returnToRecord=false;archiveDemo.error='';archivePrototypeModal(id);return}
+  if(a==='archive-back'){archiveCapture();archiveBack();return}
+  if(a==='archive-done'){closeModal();archiveDemo.returnToRecord=false;archiveDemo.tab='imports';navigate('archives');return}
+  const f=archiveFiles().find(x=>x.id===id);if(!f)return;
+  if(a==='archive-parse'){
+    target.disabled=true;target.textContent='正在读取…';
+    try{f.local=/\.(txt|md|csv|json)$/i.test(f.name);f.text=f.local?(await f.file.text()).slice(0,200000):'【演示候选，未实际解析所选文件】请在正式产品中解析，并对照原件核对。';f.parsed=true;f.status='候选待核对';archiveDemo.error=''}catch{archiveDemo.error='文件读取失败，原件仍保留，请重试。'}
+    if(f.owner===state.profile&&document.querySelector('#archive-current')?.value===f.id)archivePrototypeModal(id);return;
+  }
+  if(a==='archive-confirm'){
+    archiveCapture();if(f.saved)return;
+    if(!f.reviewed||!f.title.trim()||!f.text.trim()){archiveDemo.error='请填写标题和转录内容，并勾选核对确认后保存。';archivePrototypeModal(id);return}
+    f.saved=true;f.status='已核对并保存（模拟）';f.savedAt=new Date().toISOString();
+    if(f.date)current().events.push({d:f.date,kind:mapKind(f.type),title:f.title,note:`报告转录（用户核对） · 来源：${f.name} · ${f.text}`});
+    const name='模拟记录-'+f.name+'.json',blob=new Blob([JSON.stringify({simulation:true,source:f.name,title:f.title,type:f.type,date:f.date||null,text:f.text,review:'user_confirmed_transcription',savedAt:f.savedAt},null,2)],{type:'application/json'});archiveDemo.outputs.push({owner:f.owner,name,url:URL.createObjectURL(blob)});archiveDemo.error='';archivePrototypeModal(id);toast('已保存模拟记录，原件与输出可在档案管理回查');
+  }
+});

@@ -11,3 +11,8 @@ output/
 *.sqlite-wal
 *.sqlite-shm
 *.db
+
+.playwright-cli/
+
+# Local agent memory; release tarballs remain local build artifacts.
+.workbuddy/
