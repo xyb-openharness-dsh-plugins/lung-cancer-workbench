@@ -2,8 +2,8 @@
 
 ## 2026-10-20 · 开发快照（包版本 0.1.2-rc.15）
 
-- 保存RC2–RC14阶段累计的单文件客户端、SQLite病例与来源文档服务、临床检索、指标趋势模块、v4.2系列HTML原型及修复记录。当前指标页存在categorizedMetricSeries未定义的失败，按现有开发分支保存。
+- 保存RC2–RC14阶段累计的单文件客户端、SQLite病例与来源文档服务、临床检索、指标趋势模块、v4.2系列HTML原型及修复记录。最终快照已包含指标目录补全，56项测试通过；继续保留开发分支，实机/原型确认仍待完成。
 - `npm run check`：通过（退出码0）。
-- `npm test`：未通过（退出码1）；tests=51, pass=47, fail=4。
-- 4项客户端渲染测试因`categorizedMetricSeries is not defined`失败；本次保存开发现场，未将此状态标作可发布版本。
+- `npm test`：最终快照复核通过（退出码0）；tests=56, pass=56, fail=0。
+- 首轮检查曾有4项`categorizedMetricSeries is not defined`失败；保存时最新文件已补齐指标目录与对应测试，最终56项全部通过。Git保存不替代实机及正式发布验收。
 - 详细范围见 [Git同步记录](docs/GIT-SYNC-2026-10-20.md)；本次未创建正式发布tag。
