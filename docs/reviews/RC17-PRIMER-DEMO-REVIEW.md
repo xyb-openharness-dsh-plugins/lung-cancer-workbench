@@ -3,7 +3,7 @@
 日期：2026-10-27。基线：`docs/prototype/lung-workbench-v4.2.7.html`（sha256 已冻结在 `prototype-v4.2.7-baseline.json`）。
 候选：`docs/prototype/lung-workbench-v4.2.8.html`。生成命令：`python3 scripts/build-prototype-v428.py`。
 
-本文件只记录**原型层**的交付与实测。应用层（`lib/client.js` React 版浮窗、README 四段、升版、装机）尚未开始，等确认后再做。
+本文件只记录**原型层**的交付与实测。应用层已在 2026-10-27 demo 确认后落地：`0.1.2-rc.17` 接入整页概要与状态卡，`0.1.2-rc.18` 修掉它与看板原有横幅的冲突，见 [RC18](RC18-DASHBOARD-SINGLE-NEXT.md)。
 
 ## 本轮做了什么
 
@@ -22,9 +22,9 @@
 | 机构 / 文件 | 状态 | 链接 |
 | --- | --- | --- |
 | 国家卫生健康委 · 原发性肺癌诊疗指南（2022 年版） | 已取得原件 | `nhc.gov.cn/.../1732863054387_68585.pdf` |
-| 中华医学会 · 肺癌临床诊疗指南（2025 版） | 未取得原件，据二次来源（杂志社公众号全文） | `mp.weixin.qq.com/s?...` |
-| CSCO · 非小细胞肺癌诊疗指南（2025 版） | 未取得原件，据二次来源 | `hnysfww.com/article.php?id=4272` |
-| CSCO · 小细胞肺癌诊疗指南（2025 版） | 未取得原件，据二次来源（更新要点解读） | `liangyihui.net/doc/152195` |
+| 中华医学会 · 肺癌临床诊疗指南（2025 版） | 未取得原件，据二次来源（官方全文库） | `rs.yiigle.com/cmaid/1553565` |
+| CSCO · 非小细胞肺癌诊疗指南（2025 版） | 未取得原件，据二次来源（人卫社书目页） | `pmphmall.com/gdsdetail/654973-333567` |
+| CSCO · 小细胞肺癌诊疗指南（2025 版） | 未取得原件，据二次来源（人卫社书目页） | `pmphmall.com/gdsdetail/654952-333546` |
 | NCCN · NSCLC Guidelines V9.2026 | 未取得原件（官网需注册），据官方目录页 | `nccn.org/...?id=1450` |
 | NCCN · SCLC Guidelines V2.2026 | 未取得原件（官网需注册），据官方目录页 | `nccn.org/...?id=1451` |
 | WHO / IARC · Thoracic Tumours 5th ed.（2021） | 未取得原件（需订阅），据官方出版页 | `publications.iarc.who.int/...` |

@@ -521,3 +521,46 @@ test('36 号 §2.1/§2.5 · 顶栏 ? 打开整页概要：四段齐全、指南�
   assert.match(textOfTree(overlay), /这一句需要问你的医生/)
   assert.doesNotMatch(textOfTree(overlay), /建议治疗|可能复发|可以停药|无需就医|治愈率/)
 })
+
+/* ---------- 36 号 v2 · 看板只保留一个「下一步」来源（状态卡取代问候横幅） ---------- */
+
+const plannedRecord = (id, value, titleText) => ({
+  id, kind: 'imaging', subjectId: 'subject-1', date: { precision: 'day', value },
+  source: { kind: 'patient_reported', documentId: '自述' }, data: { titleText, status: 'scheduled' },
+  review: { state: 'accepted', revision: 1 }, createdBy: 'subject-1', createdAt: '2026-01-01T00:00:00.000Z',
+})
+
+test('36 号 §2.6 · 看板只有一个「下一步」来源：问候横幅已撤，首卡就是状态卡', () => {
+  const render = loadPanel()
+  const tree = render(base('dashboard', pathologyCase))
+  const nodes = flatten(tree)
+  assert.equal(nodes.filter(node => String(node.props?.className || '') === 'wb-hero').length, 0, '问候横幅会给出第二套「下一步」')
+  assert.equal(nodes.filter(node => String(node.props?.className || '').includes('wb-hero-next')).length, 0)
+  assert.ok(!textOfTree(tree).includes('今天，先看最要紧的一件事'), '横幅文案不应再出现')
+  // 状态卡仍在首卡位（紧跟页头之后）
+  const page = nodes.find(node => String(node.props?.className || '').includes('wb-dashboard-page'))
+  const firstCard = flatten(page).find(node => String(node.props?.className || '').includes('sc-card'))
+  assert.ok(firstCard, '看板必须有状态卡')
+})
+
+test('36 号 §2.6 · 未来的安排显示「距下次「事项」N 天」，不报成已过', () => {
+  const render = loadPanel()
+  const todayISO = new Date().toLocaleDateString('sv-SE')
+  const far = '2099-03-05'
+  const gap = Math.round((Date.parse(far + 'T00:00:00Z') - Date.parse(todayISO + 'T00:00:00Z')) / 86400000)
+  const caseWithPlan = { ...pathologyCase, records: [...pathologyCase.records, plannedRecord('ap', far, '胸部 CT 复查')] }
+  const text = textOfTree(render(base('dashboard', caseWithPlan)))
+  assert.match(text, new RegExp(`距下次「胸部 CT 复查」${gap} 天`))
+  assert.doesNotMatch(text, /已过 \d+ 天/)
+  assert.match(text, /下次：.*2099-03-05/s)
+})
+
+test('36 号 §2.6 · 日期已过的安排不算「下次」：不报「距下次」，也不冒充「下一步」', () => {
+  const render = loadPanel()
+  const caseWithPastPlan = { ...pathologyCase, records: [...pathologyCase.records, plannedRecord('bp', '2026-01-02', '旧安排')] }
+  const nodes = flatten(render(base('dashboard', caseWithPastPlan)))
+  const card = nodes.find(node => String(node.props?.className || '').includes('sc-card'))
+  const text = textOfTree(card)
+  assert.match(text, /暂无已记的安排/)
+  assert.doesNotMatch(text, /距下次|已过 \d+ 天|今天有安排/)
+})
