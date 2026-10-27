@@ -17,8 +17,9 @@ const HOOK = {
   trialPhase: 37, trialCountry: 38, showNativeConversation: 39, nativePaneWidth: 40, showAgentContext: 41,
   agentQuestion: 42, agentSelectedIds: 43, agentDraft: 44, agentDraftRevision: 45, agentDraftCaseId: 46,
   agentShareConsent: 47, showPrimer: 70,
+  trialPrefRegion: 71, trialSheetId: 72, trialSaved: 73, trialPool: 74,
 }
-const hookCount = 71
+const hookCount = 75
 
 const sampleCase = {
   schemaVersion: 1, id: 'case-1', workspaceId: 'workspace-1', subjectId: 'subject-1', displayName: '演示病例',
@@ -563,4 +564,108 @@ test('36 号 §2.6 · 日期已过的安排不算「下次」：不报「距下�
   const text = textOfTree(card)
   assert.match(text, /暂无已记的安排/)
   assert.doesNotMatch(text, /距下次|已过 \d+ 天|今天有安排/)
+})
+
+/* ============================================================
+ * RC19 · 临床试验：匹配分数 / 三态对照 / 收藏跟踪
+ * 只对照四类登记字段；药物靶点不进分母；读不出的写「待确认」，不写「符合」。
+ * ============================================================ */
+
+const trialStudy = (overrides = {}) => ({
+  nctId: 'NCT90000001',
+  title: 'A Phase II Study of DLL3 CAR-T in NSCLC After EGFR-TKI Failure',
+  histology: 'NSCLC', phase: 'PHASE2', status: 'RECRUITING', sponsor: 'Synthetic Sponsor',
+  startDate: '2026-09-01', startDateType: 'ACTUAL', enrollment: 120,
+  interventions: ['DLL3 CAR-T'], conditions: ['Non-Small Cell Lung Cancer'],
+  locations: [{ facility: 'Synthetic Hospital', city: 'Shanghai', country: 'China' }],
+  retrievedAt: '2026-10-18', ...overrides,
+})
+const trialRecord = (id, kind, data, date = '2026-05-10') => ({
+  id, kind, subjectId: 'subject-1', date: { precision: 'day', value: date },
+  source: { kind: 'report', documentId: '合成资料' }, data,
+  review: { state: 'accepted', revision: 1 }, createdBy: 'subject-1', createdAt: `${date}T00:00:00.000Z`,
+})
+const trialCase = records => ({ ...sampleCase, id: 'case-trials', displayName: '对照档案', records })
+const trialPageState = (caseFile, studies, extra = {}) => base('trials', caseFile, {
+  [HOOK.subs]: { trials: '匹配' },
+  [HOOK.trialPool]: { loading: false, error: '', histology: 'NSCLC', page: 1, data: { total: studies.length, studies } },
+  [HOOK.trialSaved]: [],
+  ...extra,
+})
+
+const egfrCase = trialCase([
+  trialRecord('d1', 'diagnosis', { clinicalType: 'nsclc', titleText: '右肺下叶浸润性腺癌', detailText: '伴骨转移' }),
+  trialRecord('s1', 'staging', { stageText: 'cT2aN2M1c · IVB 期', tnmText: 'cT2a N2 M1c', systemText: 'AJCC 第 8 版' }),
+  trialRecord('m1', 'molecular_test', { testTypeText: '组织 NGS', status: 'completed', resultText: 'EGFR exon21 L858R 错义突变；ALK/ROS1/RET 融合未检出' }),
+  trialRecord('t1', 'systemic_therapy', { eventTypeText: '奥希替尼 80 mg qd', status: 'administered_or_performed' }),
+])
+
+test('RC19 · 临床试验只按四类登记字段打分：药物靶点不进分母，符合度不写成入组资格', () => {
+  const render = loadPanel()
+  const tree = render(trialPageState(egfrCase, [trialStudy()]))
+  const text = textOfTree(tree)
+  assert.match(text, /登记字段符合度/)
+  /* 四类判据：病理类型 / 疾病范围 / 系统治疗记录 / 标志物。DLL3 是药物靶点，不生成判据。 */
+  assert.match(text, /病理类型/)
+  assert.match(text, /疾病范围/)
+  assert.match(text, /系统治疗记录/)
+  assert.doesNotMatch(text, /标志物 DLL3/, '药物靶点不能当检测条件参与打分')
+  assert.match(text, /引擎|符合度 = 符合项|符合度 = 符合项 ÷ 对照项/)
+  assert.match(text, /不是入组资格/)
+  assert.match(text, /待确认按 0 计/)
+  /* 首条登记是「After EGFR-TKI Failure」→ 后线；档案有 1 次药物治疗 → 线数判据成立 */
+  assert.match(text, /登记要求：至少 1 次既往系统治疗/)
+})
+
+/* 整棵树里有 <style>，比对卡片文案时只看卡片节点。 */
+const trialCardsText = tree => flatten(tree)
+  .filter(node => /wb-trial-card/.test(String(node.props?.className || '')))
+  .map(textOfTree).join('\n')
+
+test('RC19 · 登记写「野生型」时按反向对照：阳性档案判不符合，不判对得上', () => {
+  const render = loadPanel()
+  const wild = trialStudy({ nctId: 'NCT90000002', title: 'A Study in EGFR Wildtype NSCLC Previously Treated', interventions: ['Docetaxel'] })
+  const text = trialCardsText(render(trialPageState(egfrCase, [wild])))
+  assert.match(text, /登记要求 EGFR 为野生型 \/ 未突变/)
+  assert.match(text, /不符合\s+· EGFR L858R/)
+})
+
+test('RC19 · 病理待确认时不排名；标题读不出疾病范围时记待确认，不给 100%', () => {
+  const render = loadPanel()
+  const unknownCase = trialCase([trialRecord('p1', 'pathology', { titleText: '标本送检：病理 + 分子', originalText: '组织学待出' })])
+  const pendingTree = render(trialPageState(unknownCase, [trialStudy()]))
+  assert.match(textOfTree(pendingTree), /病理类型还没确认，这里先不排名/)
+  assert.equal(trialCardsText(pendingTree), '', '待确认病理时不渲染任何带分数的卡片')
+
+  const vague = trialStudy({ nctId: 'NCT90000003', title: 'Osimertinib and Cyclosporine A to Enhance Antitumor Efficacy', interventions: ['Osimertinib'] })
+  const vagueText = trialCardsText(render(trialPageState(egfrCase, [vague])))
+  assert.match(vagueText, /登记标题没有写清疾病范围/)
+  assert.match(vagueText, /待确认/)
+  assert.doesNotMatch(vagueText, /100%/, '只有病理一条对得上时不能给 100%')
+})
+
+test('RC19 · 收藏三态与详情浮窗：日期 + 在跟 / 准备问 / 已归档，浮窗有 role 与两个关闭入口', () => {
+  const render = loadPanel()
+  const study = trialStudy()
+  const savedState = trialPageState(egfrCase, [study], {
+    [HOOK.subs]: { trials: '收藏与跟踪' },
+    [HOOK.trialSaved]: [{ nctId: study.nctId, savedOn: '2026-10-20', state: 'asking', study }],
+  })
+  const savedText = textOfTree(render(savedState))
+  assert.match(savedText, /收藏于 2026-10-20/)
+  assert.match(savedText, /准备问/)
+  assert.match(savedText, /标为准备问/)
+  assert.match(savedText, /归档/)
+  assert.match(savedText, /没有登记状态变化时间线/)
+
+  const sheetTree = render(trialPageState(egfrCase, [study], { [HOOK.trialSheetId]: study.nctId }))
+  const sheetNodes = flatten(sheetTree)
+  const dialog = sheetNodes.find(node => node.type === 'aside' && node.props?.role === 'dialog')
+  assert.ok(dialog, '详情必须是右侧浮窗，不是居中弹窗')
+  assert.equal(dialog.props['aria-modal'], true)
+  const sheetText = textOfTree(dialog)
+  assert.match(sheetText, /本机快照只存登记的结构化字段/)
+  assert.match(sheetText, /打开官方登记页/)
+  assert.ok(sheetNodes.some(node => node.props?.['aria-label'] === '关闭详情'), '✕ 关闭入口')
+  assert.ok(sheetNodes.some(node => node.props?.className === 'wb-sheet-backdrop'), '遮罩关闭入口')
 })
