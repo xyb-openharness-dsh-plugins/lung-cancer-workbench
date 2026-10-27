@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { categorizedMetricSeries,metricDefinition } from '../lib/metric-catalog.js'
+import { categorizedMetricSeries,metricDefinition,selectedMetricSeries } from '../lib/metric-catalog.js'
 import { readFileSync } from 'node:fs'
 const row=(id,name,date,value,extra={})=>({id,kind:'metric',date:{precision:date?'day':'unknown',value:date||null},source:{kind:'report',documentId:'report-'+id},review:{state:'accepted'},data:{metricName:name,rawValue:value,unit:'unit',methodText:'A',laboratoryText:'Lab',...extra}})
 const all=records=>categorizedMetricSeries(records).flatMap(c=>c.series)
@@ -25,4 +25,14 @@ test('unknown dates, nonnumeric text, incomplete comparison metadata and same-da
  const [text]=all([row('t','CEA','2026-01-01','<0.1')]);assert.equal(text.latest.data.rawValue,'<0.1');assert.equal(text.numericRows.length,0)
  const [missing]=all([row('a','CEA','2026-01-01',1,{methodText:''}),row('b','CEA','2026-01-02',2,{methodText:''})]);assert.equal(missing.connectable,false);assert.equal(missing.delta,null)
  const [ties]=all([row('a','CEA','2026-01-01',1),row('b','CEA','2026-01-01',2)]);assert.equal(ties.latest,null);assert.equal(ties.latestRows.length,2);assert.equal(ties.connectable,false);assert.equal(ties.delta,null)
+})
+
+test('timeline selection shares card eligibility, same-day rules and full comparison identity',()=>{
+ const records=[row('a','CEA','2026-01-01',1),row('b','CEA','2026-01-01',2),row('c','CEA','2026-01-02',3),row('lab','CEA','2026-01-03',9,{laboratoryText:'Elsewhere'}),row('private','CRP','2026-01-01',7,{supportType:'mind'})]
+ const series=selectedMetricSeries(records,['CEA','CRP'])
+ assert.equal(series.length,1);assert.equal(series[0].connectable,false);assert.equal(series[0].numericRows.length,3)
+ assert.equal(selectedMetricSeries(records,[series[0].key,'CEA']).length,1)
+ const elsewhere=all(records).find(s=>s.laboratory==='Elsewhere')
+ assert.equal(selectedMetricSeries(records,[elsewhere.key])[0].latest.data.rawValue,9)
+ assert.equal(all(records).flatMap(s=>s.rows).some(r=>r.id==='private'),false)
 })

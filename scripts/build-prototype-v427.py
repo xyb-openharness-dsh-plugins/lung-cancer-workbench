@@ -6,7 +6,8 @@ base=root/'docs/prototype/lung-workbench-v4.2.6.html'
 assert hashlib.sha256(base.read_bytes()).hexdigest()==json.loads((root/'docs/reviews/prototype-v4.2.6-baseline.json').read_text())['sha256']
 s=base.read_text().replace('v4.2.6','v4.2.7')
 a=s.index('function metricIdentity(record)');b=s.index('/* ============================================================',a)
-s=s[:a]+(root/'lib/chart-geometry.js').read_text().replace('export function ','function ')+'\n'+s[b:]
+catalog=(root/'lib/metric-catalog.js').read_text().replace("import { metricIdentity, numericMetric, validMetricDay } from './chart-geometry.js'",'').replace('export ','')
+s=s[:a]+(root/'lib/chart-geometry.js').read_text().replace('export function ','function ')+'\n'+catalog+'\n'+s[b:]
 a=s.index('        const renderTimeline = () => {');b=s.index('  const wrapper=document.createElement',a)
 runtime=(root/'lib/client-timeline.js').read_text().replace('const timelinePage =','const renderTimeline =',1)
 # The prototype selector uses the same category catalog as the metrics tab, including empty entries.

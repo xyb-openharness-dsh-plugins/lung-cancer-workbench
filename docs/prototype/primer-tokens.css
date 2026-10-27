@@ -1,0 +1,10 @@
+/* 36 号 · 把 pattern 的品牌令牌映射到本项目（小肺宝蓝）语义令牌。
+ * pattern 的 disease-primer.css 只读取 --brand / --violet / --accent，取不到时退回紫色兜底；
+ * 本仓的主色叫 --blue / --blue-deep / --sky，所以在项目侧补一层别名，pattern 文件本身保持原样。
+ */
+:root {
+  --brand: var(--blue, #267ba5);
+  --brand-deep: var(--blue-deep, #155c80);
+  --brand-soft: var(--sky, #eaf6fb);
+  --dp-radius: var(--radius, 16px);
+}

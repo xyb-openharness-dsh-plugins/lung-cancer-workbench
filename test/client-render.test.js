@@ -16,9 +16,9 @@ const HOOK = {
   trialPage: 31, flipped: 32, selectedMetrics: 33, showSettings: 34, settingsTab: 35, trialStatus: 36,
   trialPhase: 37, trialCountry: 38, showNativeConversation: 39, nativePaneWidth: 40, showAgentContext: 41,
   agentQuestion: 42, agentSelectedIds: 43, agentDraft: 44, agentDraftRevision: 45, agentDraftCaseId: 46,
-  agentShareConsent: 47,
+  agentShareConsent: 47, showPrimer: 70,
 }
-const hookCount = 70
+const hookCount = 71
 
 const sampleCase = {
   schemaVersion: 1, id: 'case-1', workspaceId: 'workspace-1', subjectId: 'subject-1', displayName: '演示病例',
@@ -66,7 +66,12 @@ function loadPanel(host = {}) {
     effects.length = 0
     return Panel(props)
   }
-  render.flushEffects = () => effects[1]?.()
+  // 按效果体定位（而不是下标）：新增 effect 时不会把这条断言悄悄指向别的副作用。
+  render.flushEffects = () => {
+    const target = effects.find(fn => /display-preferences/.test(String(fn)))
+    assert.ok(target, 'display-preferences effect must exist')
+    target()
+  }
   render.storage = stored
   render.services = services
   return render
@@ -421,4 +426,98 @@ test('record metrics group automatically, flip independently and open original s
  updated=flatten(tree).filter(n=>n.props?.className==='wb-flip wb-record-metric-card')
  updated[0].props.onKeyDown({key:'Enter',target:'card',currentTarget:'card',preventDefault(){}})
  assert.equal(flatten(render()).filter(n=>n.props?.className==='wb-flip wb-record-metric-card'&&n.props['data-flipped']).length,0)
+})
+
+test('timeline and grouped cards retain same-day points without inventing a latest value or connecting order',()=>{
+ const original={...sampleCase.records[0],data:{...sampleCase.records[0].data,methodText:'A',laboratoryText:'Lab'}}
+ const demo={...sampleCase,records:[{...original,id:'a',data:{...original.data,rawValue:'1'}},{...original,id:'b',data:{...original.data,rawValue:'2'}}]}
+ const render=loadPanel(),tree=render(base('timeline',demo,{[HOOK.selectedMetrics]:['CEA']})),nodes=flatten(tree)
+ const plot=nodes.find(n=>n.type==='svg'&&String(n.props.className).includes('wb-combined-chart'))
+ assert.equal(flatten(plot).filter(n=>n.type==='path').length,0)
+ assert.equal(flatten(plot).filter(n=>n.type==='circle'&&n.props.role==='button').length,2)
+ const card=nodes.find(n=>n.props.className==='wb-flip')
+ assert.match(textOfTree(card),/同日多次/)
+ assert.match(textOfTree(tree),/同日多次，仅显示点/)
+})
+
+/* ---------- 36 号 v2 · 疾病概要（§2.1/§2.5）与看板状态卡（§2.6） ---------- */
+
+const pathologyCase = {
+  ...sampleCase,
+  records: [
+    { id: 'p1', kind: 'pathology', subjectId: 'subject-1', date: { precision: 'day', value: '2026-01-01' },
+      source: { kind: 'pathology', documentId: '病理报告' }, data: { titleText: '腺癌，EGFR 19del' },
+      review: { state: 'accepted', revision: 1 }, createdBy: 'subject-1', createdAt: '2026-01-01T00:00:00.000Z' },
+    { id: 'n1', kind: 'visit_question', subjectId: 'subject-1', date: { precision: 'day', value: '2099-03-05' },
+      source: { kind: 'patient_reported', documentId: '自述' }, data: { questionText: '下次复查要做什么' },
+      review: { state: 'accepted', revision: 1 }, createdBy: 'subject-1', createdAt: '2026-01-02T00:00:00.000Z' },
+  ],
+}
+
+test('36 号 §2.6 · 看板首卡是状态卡，天数由已确认的病理日期派生（取系统日期，不取常量）', () => {
+  const render = loadPanel()
+  const todayISO = new Date().toLocaleDateString('sv-SE')
+  const expected = Math.round((Date.parse(todayISO + 'T00:00:00Z') - Date.parse('2026-01-01T00:00:00Z')) / 86400000) + 1
+  const nodes = flatten(render(base('dashboard', pathologyCase)))
+  const card = nodes.find(node => String(node.props?.className || '').split(' ').includes('sc-card'))
+  assert.ok(card, '看板必须带一张 D+N 状态卡')
+  const text = textOfTree(card)
+  assert.match(text, new RegExp(`D\\+${expected} 状态卡`))
+  assert.match(text, new RegExp(`第 ${expected} 天`))
+  assert.match(text, /锚点：2026-01-01/)
+  // 四件齐全：卡头 / 大字天数 / 现状行 / 出口按钮排
+  assert.ok(String(card.props.className).split(' ').includes('sc-card'))
+  const actions = flatten(card).find(node => node.props?.className === 'sc-actions')
+  assert.ok(actions, '状态卡必须带出口按钮排')
+  assert.ok(textOfTree(actions).includes('疾病概要：肺癌是什么？'))
+})
+
+test('36 号 §2.6 · 没有锚点时不编天数：整卡「待初始化」', () => {
+  const render = loadPanel()
+  const nodes = flatten(render(base('dashboard', sampleCase)))
+  const card = nodes.find(node => String(node.props?.className || '').includes('sc-empty'))
+  assert.ok(card, '没有病理/诊断日期时必须是待初始化形态')
+  const text = textOfTree(card)
+  assert.match(text, /待初始化/)
+  assert.doesNotMatch(text, /第 \d+ 天/)
+})
+
+test('36 号 §2.1/§2.5 · 顶栏 ? 打开整页概要：四段齐全、指南链接可点且只收 https', () => {
+  const render = loadPanel()
+  const closed = flatten(render(base('dashboard', pathologyCase)))
+  const trigger = closed.find(node => String(node.props?.className || '').includes('wb-primer-trigger'))
+  assert.ok(trigger, '顶栏必须有 ? 入口')
+  assert.equal(trigger.props['aria-haspopup'], 'dialog')
+  assert.equal(trigger.props['aria-controls'], 'disease-primer')
+  assert.match(trigger.props['aria-label'], /疾病概要/)
+  assert.equal(textOfTree(trigger), '?')
+  assert.equal(closed.filter(node => node.props?.className === 'dp-overlay').length, 0, '未点击前不渲染整页')
+
+  const nodes = flatten(render(base('dashboard', pathologyCase, { [HOOK.showPrimer]: true })))
+  const overlay = nodes.find(node => node.props?.className === 'dp-overlay')
+  assert.ok(overlay, '? 打开后应渲染整页概要')
+  assert.equal(overlay.props.id, 'disease-primer')
+  const panel = nodes.find(node => node.props?.className === 'dp-panel')
+  assert.equal(panel.props.role, 'dialog')
+  assert.equal(panel.props['aria-modal'], 'true')
+
+  const sections = nodes.filter(node => node.props?.className === 'dp-section')
+  assert.deepEqual(sections.map(node => node.props['data-dp-section']), ['definition', 'evidence', 'landscape', 'trend'])
+  const sectionText = sections.map(textOfTree)
+  assert.match(sectionText[0], /定义/)
+  assert.match(sectionText[1], /医学资料规范和指南情况/)
+  assert.match(sectionText[2], /目前治疗全景概要/)
+  assert.match(sectionText[3], /发展趋势/)
+
+  const links = nodes.filter(node => node.type === 'a')
+  assert.ok(links.length >= 12, `来源栏与指南表都要有可点链接，实际 ${links.length}`)
+  assert.equal(links.filter(node => !/^https:\/\//.test(String(node.props?.href || ''))).length, 0, '§2.5 只收 https 链接')
+  assert.equal(nodes.filter(node => String(node.props?.className || '').includes('dp-miss')).length, 0, '不缺链接时不应出现红标')
+  assert.equal(links.filter(node => node.props.target === '_blank' && String(node.props.rel || '').includes('noopener')).length, links.length)
+
+  // 返回与关闭是两个入口（32 号），不是只给一个 ✕
+  assert.equal(nodes.filter(node => String(node.props?.className || '').includes('dp-back')).length, 1)
+  assert.equal(nodes.filter(node => String(node.props?.className || '').includes('dp-close')).length, 1)
+  assert.match(textOfTree(overlay), /这一句需要问你的医生/)
+  assert.doesNotMatch(textOfTree(overlay), /建议治疗|可能复发|可以停药|无需就医|治愈率/)
 })

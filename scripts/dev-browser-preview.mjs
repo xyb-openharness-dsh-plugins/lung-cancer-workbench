@@ -19,6 +19,7 @@ const trials=new TrialSnapshotRepository(fileURLToPath(new URL('../assets/data/l
 const routes=createWorkbenchHandlers({repository,trials,liveTrials:{search(){throw Error('not used')}},authenticate:()=>undefined,version:'UI-acceptance'})
 const html='<!doctype html><html><meta charset="utf-8"><title>小肺宝 · 本地UI验收</title><style>html,body{margin:0;height:100%}#app{height:calc(100% - 24px)}.dev-label{height:24px;font:12px/24px sans-serif;background:#fff0dc;text-align:center}</style><body><div class="dev-label">本地UI验收环境 · 独立合成资料目录 · 非DSH宿主</div><div id="app"></div><script src="/runtime.js"></script><script src="/client.js"></script></body></html>'
 const server=createServer(async(req,res)=>{try{const url=new URL(req.url,'http://localhost'),handler=routes.get(url.pathname);if(handler)return await handler(req,res)
+  if(url.pathname==='/favicon.ico'){res.writeHead(204);return res.end()}
   const files={'/client.js':new URL('../lib/client.js',import.meta.url),'/prototype':new URL('../docs/prototype/lung-workbench-v4.2.6.html',import.meta.url),'/prototype-v427':new URL('../docs/prototype/lung-workbench-v4.2.7.html',import.meta.url)}
   if(url.pathname==='/'){res.setHeader('content-type','text/html;charset=utf-8');return res.end(html)}
   if(url.pathname==='/runtime.js'){res.setHeader('content-type','text/javascript');return res.end(runtime)}

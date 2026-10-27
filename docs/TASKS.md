@@ -88,3 +88,17 @@ RC12已安装至实际Desktop Harness `web` profile；包版本、VERSION、源/
 RC13已安装到实际Desktop Harness web profile，版本/VERSION/包内及安装client/SQLite一致；见`reviews/rc13-desktop-install.json`。v4.2.7分类3D指标卡已自检并形成[原型审核](PROTOTYPE-v4.2.7-REVIEW.md)，待开发者确认对应模块再实施生产。
 
 2026-10-20 · RC14：一图秀指标菜单只显示简称、紧凑两列；完整单位/方法/机构留在title/可访问名称，选择与可比组身份不变。原型v4.2.7同步。安装证据见`reviews/rc14-desktop-install.json`，真实Desktop仍由用户手动重启验收。
+
+
+2026-10-20 · RC15分类指标卡：开发者已明确要求落地应用“指标检测”。原汇总表与时间堆叠列表改为按肿瘤标志物/血常规/肝肾/凝血/感染等自动分类的固定高度3D卡片；正面最近值，背面时间趋势与来源记录。分类与一图秀菜单共用`lib/metric-catalog.js`；完整身份仍分组，未修改SQLite schema。56/56测试和实际客户端浏览器检查通过，Desktop重启后验收待完成。详见[RC15审核](RC15-GROUPED-METRIC-CARDS-REVIEW.md)。其他Tab导航未作为本轮完成项。
+
+安装完成：RC15已写入实际Desktop Harness web profile；包版本、VERSION、客户端/分类模块/卡片模块及SQLite字节校验一致。未自动重启，等待开发者手动重启后实机验收。
+
+
+## RC16：指标卡片与一图秀一致性补充（2026-10-20）
+
+- 分类卡片与一图秀共用 `categorizedMetricSeries` / `selectedMetricSeries`；同日多条不猜先后、仅显示点，单位 / 方法 / 实验室分别分组，私密记录过滤一致。
+- 一图秀底部3D卡片跟随当前选择（最多4项），不再固定展示资料中的前4组；简称只影响显示，不改变记录身份。
+- 58项自动测试通过；实际客户端浏览器验收：110条合成病例产生11张276px卡片，独立点击 / 回车翻面；800px窗口单列、无页面横向溢出。1280px一图秀曲线位于可视区域。
+- 浏览器环境是独立合成资料预览，不能代替DSH Desktop原生宿主验收。窄窗口一图秀控制区上下堆叠，需向下滚动查看曲线；未宣称全尺寸首屏可见。
+- SQLite结构与临床数据库不变。安装证据见 `docs/reviews/rc16-desktop-install.json`；Desktop须开发者手动重启后验收。

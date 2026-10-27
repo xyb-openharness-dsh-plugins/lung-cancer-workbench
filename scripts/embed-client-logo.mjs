@@ -24,6 +24,19 @@ for(const [marker,file] of [['METRICS','client-metrics.js'],['ARCHIVE','client-a
 }
 const detailCss=readFileSync(new URL('../assets/workspace-detail.css',import.meta.url),'utf8')+'\n'+readFileSync(new URL('../assets/prototype-parity.css',import.meta.url),'utf8')
 client=client.replace(/\/\*__EXTRA_CSS_START__\*\/[\s\S]*?\/\*__EXTRA_CSS_END__\*\//,()=>`/*__EXTRA_CSS_START__*/\n${detailCss}\n/*__EXTRA_CSS_END__*/`)
+// 36 号 v2 · 疾病概要：数据与样式都以 docs/prototype 为单一来源，避免两处漂移。
+const primerDataPath=new URL('../docs/prototype/primer-data.js',import.meta.url)
+const primerDataSource=readFileSync(primerDataPath,'utf8')
+if(!/window\.DISEASE_PRIMER\s*=\s*\{/.test(primerDataSource))throw new Error('primer-data.js must assign a plain object literal to window.DISEASE_PRIMER')
+const primerData=primerDataSource.replace(/window\.DISEASE_PRIMER\s*=\s*/,'const PRIMER_DATA = ').trim()
+if(!primerData.includes('const PRIMER_DATA = {')||!primerData.endsWith('}'))throw new Error('primer-data.js must be a single assignment ending with a closing brace')
+client=client.replace(/\/\*__PRIMER_DATA_START__\*\/[\s\S]*?\/\*__PRIMER_DATA_END__\*\//,()=>`/*__PRIMER_DATA_START__*/\n${primerData}\n/*__PRIMER_DATA_END__*/`)
+const primerCss=readFileSync(new URL('../docs/prototype/primer.css',import.meta.url),'utf8')+'\n'+readFileSync(new URL('../assets/primer-theme.css',import.meta.url),'utf8')
+if(/[`]|\$\{/.test(primerCss))throw new Error('primer CSS must not contain backticks or ${} template syntax')
+client=client.replace(/\/\*__PRIMER_CSS_START__\*\/[\s\S]*?\/\*__PRIMER_CSS_END__\*\//,()=>`/*__PRIMER_CSS_START__*/\n${primerCss}\n/*__PRIMER_CSS_END__*/`)
+const primerPagePattern=/\/\*__PRIMER_PAGE_START__\*\/[\s\S]*?\/\*__PRIMER_PAGE_END__\*\//
+if(!primerPagePattern.test(client))throw new Error('PRIMER page marker was not found')
+client=client.replace(primerPagePattern,()=>`/*__PRIMER_PAGE_START__*/\n${readFileSync(new URL('../lib/client-primer.js',import.meta.url),'utf8')}\n/*__PRIMER_PAGE_END__*/`)
 const logo = `data:image/png;base64,${readFileSync(logoPath).toString('base64')}`
 const logoMarker = /const LOGO_DATA_URI = '(?:__LUNG_CARE_LOGO_DATA_URI__|data:image\/png;base64,[A-Za-z0-9+/=]+)'/
 if (!logoMarker.test(client)) throw new Error('Client logo marker was not found')

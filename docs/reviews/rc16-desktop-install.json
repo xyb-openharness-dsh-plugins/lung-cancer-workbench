@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-20",
+  "version": "0.1.2-rc.16",
+  "profile": "/Users/qinxiaoqiang/Library/Application Support/dsh-desktop/harness/profiles/web",
+  "dependency": "file:/Users/qinxiaoqiang/Downloads/lung-cancer-workbench/release/xyb-openharness-dsh-plugins-lung-cancer-workbench-0.1.2-rc.16.tgz",
+  "tarballSha256": "f249dc9a5876efe2ce1203c0b4d3215dee6f9bf3944c2530115f6b38a1768d9e",
+  "clientSha256": "6b9f7d3a1886a0515b72a92b9136841e198ad99b1858471004dd3bd2973ce089",
+  "checks": [
+    "source=packaged=installed: all 38 package files",
+    "version and VERSION",
+    "correct Desktop Harness profile dependency"
+  ],
+  "tests": "58/58",
+  "browserAcceptance": "actual client in isolated synthetic-data preview; 11 cards at 276px, independent click/Enter flip, 800px single column, 1280px timeline visible",
+  "restart": "manual; no restart performed",
+  "desktopVisualAcceptance": "pending after manual restart"
+}

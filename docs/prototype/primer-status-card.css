@@ -1,0 +1,91 @@
+/* 36 号 §2.6 · 看板首卡「D+N 状态卡」
+ * 四件：卡头 eyebrow / 大字天数 / 现状行 / 出口按钮排。
+ * 天数由锚点日派生，不手填；无锚点数据整卡显示「待初始化」。
+ * 颜色走本项目令牌（assets/tokens.css 与原型 :root 同源），取不到时兜底。
+ */
+
+.sc-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(150px, auto) minmax(0, 1fr);
+  gap: 14px 26px;
+  align-items: start;
+  padding: 20px 22px;
+  background: var(--surface, #fff);
+  border: 1px solid var(--line, #dbe8ef);
+  border-radius: var(--radius, 16px);
+  box-shadow: var(--shadow, 0 8px 24px rgba(38, 90, 116, .055));
+  overflow: hidden;
+}
+.sc-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: linear-gradient(180deg, var(--blue, #267ba5), var(--blue-soft, #8ec4dd));
+}
+
+.sc-head { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.sc-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: var(--blue-deep, #155c80);
+  background: var(--sky, #eaf6fb);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+.sc-anchor { font-size: 11.5px; color: var(--muted, #6b8492); }
+
+.sc-day { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.sc-day b {
+  font-size: 28px;
+  line-height: 1.15;
+  font-weight: 700;
+  color: var(--blue-deep, #155c80);
+  font-variant-numeric: tabular-nums;
+}
+.sc-day span { font-size: 11.5px; color: var(--muted, #6b8492); }
+
+.sc-now { display: grid; gap: 5px; min-width: 0; justify-items: start; align-content: start; }
+.sc-now .sc-stage { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.sc-now .sc-stage b { font-size: 15px; font-weight: 650; color: var(--ink, #1e3a4c); }
+.sc-next {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink2, #3a5768);
+  overflow-wrap: anywhere;
+}
+.sc-next b { font-variant-numeric: tabular-nums; }
+
+.sc-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-top: 4px;
+  border-top: 1px dashed var(--line-soft, #eef4f7);
+}
+.sc-actions .sc-hint { font-size: 11px; color: var(--muted, #6b8492); margin-left: auto; }
+
+/* 待初始化：没有锚点日 */
+.sc-card.sc-empty .sc-day b { font-size: 18px; color: var(--muted, #6b8492); }
+.sc-card.sc-empty::before { background: var(--line, #dbe8ef); }
+
+@media (max-width: 720px) {
+  .sc-card { grid-template-columns: minmax(0, 1fr); padding: 16px; }
+  .sc-actions .sc-hint { margin-left: 0; }
+}
+
+/* 现状行第一行：记录主体 + 模拟资料标识（不写医学结论） */
+.sc-who {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--ink, #1e3a4c);
+}
+.sc-who .muted { font-weight: 500; }

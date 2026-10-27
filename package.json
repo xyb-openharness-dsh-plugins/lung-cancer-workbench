@@ -1,6 +1,6 @@
 {
   "name": "@xyb-openharness-dsh-plugins/lung-cancer-workbench",
-  "version": "0.1.2-rc.15",
+  "version": "0.1.2-rc.17",
   "description": "面向肺癌患者与照护者的本机资料、就诊准备与综合照护工作台（开发中，未发布）",
   "private": true,
   "type": "module",
