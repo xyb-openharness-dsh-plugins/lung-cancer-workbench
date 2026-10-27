@@ -18,8 +18,9 @@ const HOOK = {
   agentQuestion: 42, agentSelectedIds: 43, agentDraft: 44, agentDraftRevision: 45, agentDraftCaseId: 46,
   agentShareConsent: 47, showPrimer: 70,
   trialPrefRegion: 71, trialSheetId: 72, trialSaved: 73, trialPool: 74,
+  splitterHover: 75, splitterDragging: 76,
 }
-const hookCount = 75
+const hookCount = 77
 
 const sampleCase = {
   schemaVersion: 1, id: 'case-1', workspaceId: 'workspace-1', subjectId: 'subject-1', displayName: '演示病例',
