@@ -1438,8 +1438,9 @@ html.dp-lock, html.dp-lock body{ overflow: hidden; }
 /* 36 号 · 疾病概要数据（小肺宝 · 肺癌）
  *
  * 四条硬约束见 docs/36-DISEASE-PRIMER.md：四段固定顺序、第②层只做解释、趋势段白名单、来源栏必标是否取得原件。
- * §2.5：每一行指南都必须带可点链接——original:true 用 url，original:false 用 secondaryUrl，且只收 https。
- * 本文件所有链接于 2026-10-27 逐条用 HTTP 请求验证可达（200）。
+ * §2.5：每一行指南都必须带可点链接——original:true 用 url 并声明 kind，original:false 用 secondaryUrl；
+ *       官方入口（NCCN 临床版）用 entry:true + kind:hub + note，不得写成「已取得」。
+ * 本文件链接于 2026-10-27 逐条验证：PDF 走 content-type + 真下载（file 认 PDF），网页走真浏览器（verify-links 只收 OK）。
  */
 window.DISEASE_PRIMER = {
   brand: '小肺宝 LungPal',
@@ -1472,31 +1473,40 @@ window.DISEASE_PRIMER = {
         head: ['机构', '文件全名', '版本 / 年份', '原件', '本台用途'],
         rows: [
           ['国家卫生健康委', '原发性肺癌诊疗指南', '2022 年版（2022-04-03 印发）',
-            { text: '已取得原件 · 打开 PDF', url: 'https://www.nhc.gov.cn/yzygj/c100068/202204/0c1f7d3aca0545abbeb02030ce255930/files/1732863054387_68585.pdf' },
+            { text: '已取得原件 · 打开 PDF', kind: 'pdf', url: 'https://www.nhc.gov.cn/yzygj/c100068/202204/0c1f7d3aca0545abbeb02030ce255930/files/1732863054387_68585.pdf' },
             '诊断流程、分期检查与治疗原则的国内基线'],
           ['中华医学会', '肺癌临床诊疗指南', '2025 版',
-            { text: '未取得原件（全文需登录），据中华医学期刊网', url: 'https://rs.yiigle.com/cmaid/1553565' },
+            { text: '未取得原件（全文需登录），据中华医学期刊网', kind: 'fulltext', url: 'https://rs.yiigle.com/cmaid/1553565', note: '期刊全文页可打开，正文需登录；本台未取得 PDF 原件' },
             '筛查人群、基因检测范围与随访节奏'],
           ['CSCO', '非小细胞肺癌诊疗指南', '2025 版',
-            { text: '未取得原件（纸质书），据人卫社书目页', url: 'https://www.pmphmall.com/gdsdetail/654973-333567' },
+            { text: '未取得原件（纸质书），据人卫社书目页', kind: 'hub', url: 'https://www.pmphmall.com/gdsdetail/654973-333567', note: '人卫社书目页不是原件；纸质书，无官方免费电子全文' },
             'NSCLC 分期治疗与推荐分级'],
           ['CSCO', '小细胞肺癌诊疗指南', '2025 版',
-            { text: '未取得原件（纸质书），据人卫社书目页', url: 'https://www.pmphmall.com/gdsdetail/654952-333546' },
+            { text: '未取得原件（纸质书），据人卫社书目页', kind: 'hub', url: 'https://www.pmphmall.com/gdsdetail/654952-333546', note: '人卫社书目页不是原件；纸质书，无官方免费电子全文' },
             'SCLC 分期治疗、放疗与免疫巩固'],
-          ['NCCN', 'NCCN Guidelines · Non-Small Cell Lung Cancer', 'V9.2026',
-            { text: '未取得原件（官网需注册），据官方目录页', url: 'https://www.nccn.org/guidelines/nccn-guidelines/guidelines-detail?category=1&id=1450' },
+          ['NCCN', 'NCCN Guidelines · Non-Small Cell Lung Cancer（临床版）', 'V9.2026',
+            { text: '官方入口 · 临床版全文需自行注册', kind: 'hub', url: 'https://www.nccn.org/guidelines/nccn-guidelines/guidelines-detail?category=1&id=1450', note: '临床版全文需在 NCCN 官网注册后取得；本台未取得该版原件' },
             '国际 NSCLC 路径对照'],
-          ['NCCN', 'NCCN Guidelines · Small Cell Lung Cancer', 'V2.2026',
-            { text: '未取得原件（官网需注册），据官方目录页', url: 'https://www.nccn.org/guidelines/nccn-guidelines/guidelines-detail?category=1&id=1451' },
+          ['NCCN', 'NCCN Guidelines for Patients · Lung Cancer（早期与局部晚期，患者版）', '2026 患者版',
+            { text: '已取得：官方患者版 PDF', kind: 'pdf', url: 'https://www.nccn.org/patients/guidelines/content/PDF/lung-early-stage-patient.pdf' },
+            '患者可读的分期检查与治疗概览（不是临床版）'],
+          ['NCCN', 'NCCN Guidelines for Patients · Lung Cancer（转移性，患者版）', '2026 患者版',
+            { text: '已取得：官方患者版 PDF', kind: 'pdf', url: 'https://www.nccn.org/patients/guidelines/content/PDF/lung-metastatic-patient.pdf' },
+            '晚期患者可读的治疗概览（不是临床版）'],
+          ['NCCN', 'NCCN Guidelines · Small Cell Lung Cancer（临床版）', 'V2.2026',
+            { text: '官方入口 · 临床版全文需自行注册', kind: 'hub', url: 'https://www.nccn.org/guidelines/nccn-guidelines/guidelines-detail?category=1&id=1462', note: '临床版全文需在 NCCN 官网注册后取得；本台未取得该版原件' },
             '国际 SCLC 路径对照'],
+          ['NCCN', 'NCCN Guidelines for Patients · Small Cell Lung Cancer（患者版）', '2024 患者版',
+            { text: '已取得：官方患者版 PDF', kind: 'pdf', url: 'https://www.nccn.org/patients/guidelines/content/PDF/SCLC-patient-guideline.pdf' },
+            '患者可读的 SCLC 治疗概览（不是临床版）'],
           ['WHO / IARC', 'WHO Classification of Tumours · Thoracic Tumours', '5th ed.（2021）',
-            { text: '未取得原件（需订阅），据官方出版页', url: 'https://publications.iarc.who.int/Book-And-Report-Series/Who-Classification-Of-Tumours/Thoracic-Tumours-2021' },
+            { text: '未取得原件（需订阅），据官方出版页', kind: 'hub', url: 'https://publications.iarc.who.int/Book-And-Report-Series/Who-Classification-Of-Tumours/Thoracic-Tumours-2021', note: 'IARC 官方出版页不是原件；正文需订阅' },
             '组织学分类与命名口径'],
           ['AJCC', 'AJCC Cancer Staging Manual', '8th ed.（2017）',
-            { text: '未取得原件（需订阅），据出版方条目', url: 'https://doi.org/10.1007/978-3-319-40618-3' },
+            { text: '未取得原件（付费手册），据 AJCC 官方分期总则 PDF', kind: 'pdf', url: 'https://www.facs.org/media/2zvlrdmi/ajcc_staging_rules_8th_ed.pdf', note: '该 PDF 是第 1 章分期总则；肺癌章节在付费手册内' },
             'TNM 分期体系与期组'],
-          ['ESMO', 'Metastatic Non-Small Cell Lung Cancer: ESMO Clinical Practice Guidelines', '2018（Ann Oncol 29 Suppl 4）',
-            { text: '已取得原件 · 打开全文', url: 'https://doi.org/10.1093/annonc/mdy275' },
+          ['ESMO', 'ESMO Clinical Practice Guideline: Non-Oncogene-Addicted Metastatic Non-Small-Cell Lung Cancer', '现行版（ESMO 页面未标注出版年）',
+            { text: '未取得原件，据 ESMO 官方指南页', kind: 'hub', url: 'https://www.esmo.org/guidelines/esmo-clinical-practice-guideline-non-oncogene-addicted-metastatic-non-small-cell-lung-cancer', note: '官方指南页不是原件；Ann Oncol 全文页对脚本不可读' },
             '晚期 NSCLC 的国际对照口径']
         ]
       },
@@ -1506,15 +1516,18 @@ window.DISEASE_PRIMER = {
         'NCCN 指南的 PDF 需要注册账号才能下载；本台只链接到官方目录页，不转载其正文。'
       ],
       sources: [
-        { org: '国家卫生健康委', doc: '原发性肺癌诊疗指南', version: '2022 年版', original: true, url: 'https://www.nhc.gov.cn/yzygj/c100068/202204/0c1f7d3aca0545abbeb02030ce255930/files/1732863054387_68585.pdf', page: '页码待核' },
+        { org: '国家卫生健康委', doc: '原发性肺癌诊疗指南', version: '2022 年版', original: true, kind: 'pdf', url: 'https://www.nhc.gov.cn/yzygj/c100068/202204/0c1f7d3aca0545abbeb02030ce255930/files/1732863054387_68585.pdf', page: '页码待核' },
         { org: '中华医学会', doc: '肺癌临床诊疗指南', version: '2025 版', original: false, secondaryUrl: 'https://rs.yiigle.com/cmaid/1553565', page: '页码待核', note: '中华医学期刊全文数据库（官方）；正文需登录' },
         { org: 'CSCO', doc: '非小细胞肺癌诊疗指南', version: '2025 版', original: false, secondaryUrl: 'https://www.pmphmall.com/gdsdetail/654973-333567', page: '页码待核', note: '人民卫生出版社书目页（纸质书，无官方电子全文）' },
         { org: 'CSCO', doc: '小细胞肺癌诊疗指南', version: '2025 版', original: false, secondaryUrl: 'https://www.pmphmall.com/gdsdetail/654952-333546', page: '页码待核', note: '人民卫生出版社书目页（纸质书，无官方电子全文）' },
-        { org: 'NCCN', doc: 'NCCN Guidelines · Non-Small Cell Lung Cancer', version: 'V9.2026', original: false, secondaryUrl: 'https://www.nccn.org/guidelines/nccn-guidelines/guidelines-detail?category=1&id=1450', page: '页码待核', note: '官方指南页，PDF 需注册' },
-        { org: 'NCCN', doc: 'NCCN Guidelines · Small Cell Lung Cancer', version: 'V2.2026', original: false, secondaryUrl: 'https://www.nccn.org/guidelines/nccn-guidelines/guidelines-detail?category=1&id=1451', page: '页码待核', note: '官方指南页，PDF 需注册' },
+        { org: 'NCCN', doc: 'NCCN Guidelines · Non-Small Cell Lung Cancer（临床版）', version: 'V9.2026', entry: true, kind: 'hub', url: 'https://www.nccn.org/guidelines/nccn-guidelines/guidelines-detail?category=1&id=1450', note: '临床版全文需自行注册；本台未取得该版原件' },
+        { org: 'NCCN', doc: 'NCCN Guidelines for Patients · Lung Cancer（早期与局部晚期，患者版）', version: '2026 患者版', original: true, kind: 'pdf', url: 'https://www.nccn.org/patients/guidelines/content/PDF/lung-early-stage-patient.pdf', note: '患者版，不是临床版全文' },
+        { org: 'NCCN', doc: 'NCCN Guidelines for Patients · Lung Cancer（转移性，患者版）', version: '2026 患者版', original: true, kind: 'pdf', url: 'https://www.nccn.org/patients/guidelines/content/PDF/lung-metastatic-patient.pdf', note: '患者版，不是临床版全文' },
+        { org: 'NCCN', doc: 'NCCN Guidelines · Small Cell Lung Cancer（临床版）', version: 'V2.2026', entry: true, kind: 'hub', url: 'https://www.nccn.org/guidelines/nccn-guidelines/guidelines-detail?category=1&id=1462', note: '临床版全文需自行注册；本台未取得该版原件' },
+        { org: 'NCCN', doc: 'NCCN Guidelines for Patients · Small Cell Lung Cancer（患者版）', version: '2024 患者版', original: true, kind: 'pdf', url: 'https://www.nccn.org/patients/guidelines/content/PDF/SCLC-patient-guideline.pdf', note: '患者版，不是临床版全文' },
         { org: 'WHO / IARC', doc: 'WHO Classification of Tumours · Thoracic Tumours', version: '5th ed.（2021）', original: false, secondaryUrl: 'https://publications.iarc.who.int/Book-And-Report-Series/Who-Classification-Of-Tumours/Thoracic-Tumours-2021', page: '页码待核', note: 'IARC 官方出版页，正文需订阅' },
-        { org: 'AJCC', doc: 'AJCC Cancer Staging Manual', version: '8th ed.（2017）', original: false, secondaryUrl: 'https://doi.org/10.1007/978-3-319-40618-3', page: '页码待核', note: '出版方条目，正文需订阅' },
-        { org: 'ESMO', doc: 'Metastatic NSCLC: ESMO Clinical Practice Guidelines', version: '2018', original: true, url: 'https://doi.org/10.1093/annonc/mdy275', page: '页码待核' }
+        { org: 'AJCC', doc: 'AJCC Cancer Staging Manual', version: '8th ed.（2017）', original: false, secondaryUrl: 'https://www.facs.org/media/2zvlrdmi/ajcc_staging_rules_8th_ed.pdf', page: '页码待核', note: '据官方分期总则 PDF（第 1 章）；肺癌章节在付费手册内' },
+        { org: 'ESMO', doc: 'ESMO Clinical Practice Guideline: Non-Oncogene-Addicted Metastatic NSCLC', version: '现行版（页面未标注出版年）', original: false, secondaryUrl: 'https://www.esmo.org/guidelines/esmo-clinical-practice-guideline-non-oncogene-addicted-metastatic-non-small-cell-lung-cancer', note: 'ESMO 官方指南页；Ann Oncol 全文页对脚本不可读' }
       ]
     },
     {
@@ -1586,9 +1599,9 @@ window.DISEASE_PRIMER = {
         '以上是文献与指南里列出的手段，按病期与线序排列，不代表任何一项适合你。选哪一个，这一句需要问你的医生。'
       ],
       sources: [
-        { org: '国家卫生健康委', doc: '原发性肺癌诊疗指南', version: '2022 年版', original: true, url: 'https://www.nhc.gov.cn/yzygj/c100068/202204/0c1f7d3aca0545abbeb02030ce255930/files/1732863054387_68585.pdf', page: '页码待核' },
+        { org: '国家卫生健康委', doc: '原发性肺癌诊疗指南', version: '2022 年版', original: true, kind: 'pdf', url: 'https://www.nhc.gov.cn/yzygj/c100068/202204/0c1f7d3aca0545abbeb02030ce255930/files/1732863054387_68585.pdf', page: '页码待核' },
         { org: '中华医学会', doc: '肺癌临床诊疗指南', version: '2025 版', original: false, secondaryUrl: 'https://rs.yiigle.com/cmaid/1553565', page: '页码待核', note: '中华医学期刊全文数据库（官方）；正文需登录' },
-        { org: 'NCCN', doc: 'NSCLC / SCLC Guidelines', version: 'V9.2026 / V2.2026', original: false, secondaryUrl: 'https://www.nccn.org/guidelines/nccn-guidelines/guidelines-detail?category=1&id=1450', note: '官网需注册' }
+        { org: 'NCCN', doc: 'NCCN Guidelines · NSCLC / SCLC（临床版）', version: 'V9.2026 / V2.2026', entry: true, kind: 'hub', url: 'https://www.nccn.org/guidelines/nccn-guidelines/guidelines-detail?category=1&id=1450', note: '临床版全文需自行注册；SCLC 入口见 id=1462' }
       ]
     },
     {
@@ -1607,13 +1620,14 @@ window.DISEASE_PRIMER = {
       ],
       sources: [
         { org: 'WHO / IARC', doc: 'WHO Classification of Tumours · Thoracic Tumours', version: '5th ed.（2021）', original: false, secondaryUrl: 'https://publications.iarc.who.int/Book-And-Report-Series/Who-Classification-Of-Tumours/Thoracic-Tumours-2021', note: '据官方出版页' },
+        { org: 'AJCC', doc: 'AJCC Cancer Staging Manual', version: '8th ed.（2017）', original: false, secondaryUrl: 'https://www.facs.org/media/2zvlrdmi/ajcc_staging_rules_8th_ed.pdf', note: '据官方分期总则 PDF（第 1 章）' },
         { org: 'CSCO', doc: '小细胞肺癌诊疗指南', version: '2025 版', original: false, secondaryUrl: 'https://www.pmphmall.com/gdsdetail/654952-333546', note: '人民卫生出版社书目页（纸质书，无官方电子全文）' },
-        { org: 'NCCN', doc: 'NSCLC / SCLC Guidelines', version: 'V9.2026 / V2.2026', original: false, secondaryUrl: 'https://www.nccn.org/guidelines/nccn-guidelines/guidelines-detail?category=1&id=1451', note: '官网需注册' }
+        { org: 'NCCN', doc: 'NCCN Guidelines · NSCLC（临床版）', version: 'V9.2026', entry: true, kind: 'hub', url: 'https://www.nccn.org/guidelines/nccn-guidelines/guidelines-detail?category=1&id=1450', note: '临床版全文需自行注册；本台未取得该版原件' },
+        { org: 'NCCN', doc: 'NCCN Guidelines · SCLC（临床版）', version: 'V2.2026', entry: true, kind: 'hub', url: 'https://www.nccn.org/guidelines/nccn-guidelines/guidelines-detail?category=1&id=1462', note: '临床版全文需自行注册；本台未取得该版原件' }
       ]
     }
   ]
 }
-
 </script>
 <script>
 /* 36 号 · 疾病概要（「?」入口）参考实现
@@ -1685,7 +1699,8 @@ window.DISEASE_PRIMER = {
     return /^https:\/\//i.test(t) ? t : ''
   }
   /* 2026-10-27：原件列必须是可点链接（36 号 §2.5）——"已取得"三个字不带链接=违规。
-     s.url=原件链接（官方 PDF/DOI/PMC/官网页）；s.secondaryUrl=未取得原件时的二次来源链接。 */
+     s.url=原件链接（官方 PDF/DOI/PMC/官网页）；s.secondaryUrl=未取得原件时的二次来源链接；
+     s.entry=官方入口页（读者须自行注册/订阅后取得，本台未取得该版原件，如 NCCN 临床版）。 */
   function sourceLine(s) {
     if (!s) return ''
     var bits = [s.org, s.doc].filter(Boolean).join(' · ')
@@ -1693,7 +1708,12 @@ window.DISEASE_PRIMER = {
     if (s.version) tail.push(s.version)
     var url = safeHref(s.url), sec = safeHref(s.secondaryUrl)
     if (s.nolink) { /* 说明行/无对应文件：§2.5 不适用（须显式标注 nolink:true 并在 note 说明） */ }
-    else if (s.original) {
+    else if (s.entry) {
+      /* 官方入口 ≠ 原件：全文要读者自己注册/付费才能拿到，所以不给"已取得"。 */
+      tail.push(url
+        ? '官方入口<a href="' + url + '" target="_blank" rel="noopener noreferrer" class="dp-link">需自行注册 · 打开 ↗</a>'
+        : '官方入口<span class="dp-miss">（缺链接，违反 36 号 §2.5）</span>')
+    } else if (s.original) {
       tail.push(url
         ? '原件<a href="' + url + '" target="_blank" rel="noopener noreferrer" class="dp-link">已取得 · 打开/下载 ↗</a>'
         : '原件已取得<span class="dp-miss">（缺链接，违反 36 号 §2.5）</span>')
@@ -1887,7 +1907,6 @@ window.DISEASE_PRIMER = {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot)
   else boot()
 })(typeof window !== 'undefined' ? window : this)
-
 </script>
 <script>
 'use strict';

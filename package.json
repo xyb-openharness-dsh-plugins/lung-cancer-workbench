@@ -1,6 +1,6 @@
 {
   "name": "@xyb-openharness-dsh-plugins/lung-cancer-workbench",
-  "version": "0.1.2-rc.19",
+  "version": "0.1.2-rc.20",
   "description": "面向肺癌患者与照护者的本机资料、就诊准备与综合照护工作台（开发中，未发布）",
   "private": true,
   "type": "module",
@@ -23,7 +23,7 @@
   ],
   "scripts": {
     "build": "node scripts/embed-client-logo.mjs",
-    "check": "node --check dsh/index.js && node --check lib/client.js && node scripts/check-workbench-package.mjs .",
+    "check": "node --check dsh/index.js && node --check lib/client.js && node scripts/check-workbench-package.mjs . && node scripts/check-primer-links.mjs --data docs/prototype/primer-data.js",
     "test": "node --test",
     "pack:check": "npm pack --dry-run"
   },

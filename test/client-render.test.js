@@ -523,6 +523,21 @@ test('36 号 §2.1/§2.5 · 顶栏 ? 打开整页概要：四段齐全、指南�
   assert.doesNotMatch(textOfTree(overlay), /建议治疗|可能复发|可以停药|无需就医|治愈率/)
 })
 
+test('36 号 §2.5 · NCCN 临床版是「官方入口」不是「已取得」，患者版 PDF 才是原件', () => {
+  const render = loadPanel()
+  const nodes = flatten(render(base('dashboard', pathologyCase, { [HOOK.showPrimer]: true })))
+  const overlay = nodes.find(node => node.props?.className === 'dp-overlay')
+  const text = textOfTree(overlay)
+  assert.match(text, /官方入口 · 需自行注册/)
+  assert.match(text, /已取得：官方患者版 PDF/)
+  assert.doesNotMatch(text, /临床版[^。｜]{0,24}已取得/)
+  assert.equal(nodes.filter(node => String(node.props?.className || '').includes('dp-miss')).length, 0, '四条链接齐全时不应出现红标')
+  const hrefs = nodes.filter(node => node.type === 'a').map(node => String(node.props?.href || ''))
+  assert.ok(hrefs.some(href => href.endsWith('/patients/guidelines/content/PDF/lung-early-stage-patient.pdf')), '患者版 PDF 必须可点')
+  assert.ok(hrefs.some(href => href.includes('guidelines-detail?category=1&id=1462')), 'SCLC 临床版入口 id=1462')
+  assert.ok(!hrefs.some(href => href.includes('id=1451')), 'id=1451 是 Occult Primary，不能留在 SCLC 行')
+})
+
 /* ---------- 36 号 v2 · 看板只保留一个「下一步」来源（状态卡取代问候横幅） ---------- */
 
 const plannedRecord = (id, value, titleText) => ({

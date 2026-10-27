@@ -1,5 +1,19 @@
 # 变更记录
 
+## 2026-10-27 · 36 号疾病概要 v2 引入：指南原件可点 + 看板 D+N 状态卡（包版本 0.1.2-rc.20）
+
+按 36 号 §2.1/§2.5/§2.6 收紧重做疾病概要的数据与入口；装机入口在 `lib/client.js`（源码 `lib/client-primer.js`，构建期注入数据与 `primer.css`）。
+
+- **四段固定**：`定义 → 医学资料规范和指南情况 → 目前治疗全景概要 → 发展趋势`，顺序与标题由探针 P2/P8 校验；每段都有来源栏。
+- **指南表 12 行、链接 12 条，0 条 nolink**：卫健委 2022 PDF 已取得（真 PDF 74 页）；NCCN 患者版 3 份 PDF（早期/局部晚期、转移性、SCLC）已取得；NCCN 临床版 NSCLC/SCLC 用 `entry: true + kind: hub` 标「官方入口 · 需自行注册」，不写「已取得」；中华医学会、CSCO、WHO、AJCC、ESMO 均如实标「未取得原件」并给二次来源。
+- **修正死链/假链**：NCCN SCLC 详情页 id 由 `1451`（Occult Primary）改为 `1462`；AJCC 8th DOI 打开是「Deleted」页，改为 AJCC 官方分期总则 PDF（第 1 章，注明肺癌章节在付费手册内）；ESMO 2018 DOI 全文页对脚本不可读，改为 ESMO 官方现行指南页并标「未取得原件」。
+- **原件类型**：新增 `kind`（`pdf` / `fulltext` / `registry` / `dataset` / `hub`）与 `entry` 语义，客户端 `primerSourceLine` 同步渲染「官方入口 · 需自行注册」，缺链接仍走红标 `.dp-miss`。
+- **状态卡 §2.6 四件**：卡头 eyebrow（`D+N 状态卡 · 距下次…`）/ 锚点日派生大字天数（无锚点显示「待初始化」并指向录入）/ 现状行（阶段 + 状态 + 下次日期与事项）/ 出口按钮排（主按钮进当前阶段核心页 + 「疾病概要：肺癌是什么？」副按钮）。原型与装机层同源。
+- **原型同步**：`docs/prototype/lung-workbench-v4.2.8.html` 与 `v4.3.0.html` 的内联数据与 primer 模块按 `primer-data.js` / `primer.js` 同步；内联时转义 `</script>`，避免注释截断脚本。
+- **闸门**：新增 `scripts/check-primer-links.mjs`（L1–L12，静态 + `--http`）与 `scripts/probe-disease-primer.mjs`（P1–P9 + E0），前者接入 `npm run check`；两者 `--self-test` 均能报红。
+- **实测**：probe `10/10`（v4.2.8 与 v4.3.0 各一次）；`check-primer-links --http` 57 项通过 0 失败；`npm run check` 退出 0；`npm test` 69/69（新增 1 条 NCCN 入口/患者版断言）。
+- **未完成**：装机副本刷新与真机抽查需宿主执行（本任务不 push、不装机）。
+
 ## 2026-10-27 · 临床试验模块重做：匹配分数 + 三态对照 + 详情浮窗 + 收藏跟踪（包版本 0.1.2-rc.19）
 
 用户确认 G2 demo `lung-workbench-v4.3.0.html` 后落到应用层（`lib/client-trials.js` 重写，`assets/trials.css` 新增）。
