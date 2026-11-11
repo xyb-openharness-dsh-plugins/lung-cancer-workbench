@@ -1,3 +1,11 @@
+## 0.1.2-rc.24（2026-11-11，AI 对话面板契约第三轮复核）
+
+- 补齐**会话变化订阅**：`desktopWorkbenches.subscribe()` 驱动 `paneTick` 重渲染（rc.23 记为已做，代码里没有）
+- 顶栏按钮文案与可用性不再读 `conversation` 容器：改用 `ownedSession()` + `newSession` 能力
+  （customFrame 下宿主即使没会话也会传隐藏容器，旧写法会显示「打开 AI 对话」却打不开）
+- 能力门禁由 `ensureSession` 改为 `newSession`；全程不调用 `ensureSession`
+- 版本三处对齐：VERSION / package.json / 客户端 `VERSION`（此前 rc.23 与 rc.21 打架，check 红）
+
 ## 0.1.2-rc.23（2026-11-11，AI 对话面板激活修复第二轮）
 
 - 创建走 defaultWorkspace + newSession（不再 ensureSession/pickDirectory）
