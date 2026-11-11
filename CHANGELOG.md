@@ -1,3 +1,9 @@
+## 0.1.2-rc.23（2026-11-11，AI 对话面板激活修复第二轮）
+
+- 创建走 defaultWorkspace + newSession（不再 ensureSession/pickDirectory）
+- 草稿只填不发（移除 input.submit 自动发送）
+- 订阅会话变化触发重渲染；无会话时点按钮创建而非禁用
+
 ## 0.1.2-rc.22（2026-11-11，AI 对话面板激活修复）
 
 - 会话判定改用宿主归属 `ownedSession()`（`ownsSession(currentSession())`），不再用 `Boolean(conversation)`（customFrame 下没会话也会传隐藏容器 → 判断恒为真 → 点了没反应）。
