@@ -1,3 +1,14 @@
+## 0.1.2-rc.25 — 2026-11-13
+
+三缺口批量补齐（本仓原为 D 型：界面内联在 `lib/client.js`，无 `public/`；数据层其实已相当完整——`case_files` 多档案 + 记录写入都在，缺的是**资料目录入口**）：
+
+- **资料目录真入口**：面板顶栏新增「配置目录」→ `uiWorkspace.pickDirectory()` → 口径硬拒（主目录本身/桌面/下载根/tmp，客户端+服务端各判一遍）→ `POST /api/lung-cancer-workbench/root` 落盘回显；`SqliteCaseRepository.switchRoot()` 先把新库开起来再替换，失败回滚原库（不弄丢数据根）。
+- 服务端：`lib/server/api.js` 新增 `root` 路由（GET 读当前、POST 校验后切根，400 带人话原因）。
+- 复核：新建/多档案（`cases` + `case_files` 表 + `createCase`）、临床试验四段均**已存在**，本次未改；此前被闸门判红是因为判据只认 `subjects/profiles` 命名——闸门已扩词表并改为**递归读 `dsh/` 与 `lib/` 子目录**（原先漏读 `lib/server/*`，把真实现挡在门外）。
+- 校验：三闸门全绿；`npm run check` 全绿；页面/客户端版本字面量同步 rc.25。
+- 运行时实测（本机 stub，直连 `createWorkbenchHandlers`）：`GET /root` → 返回当前目录；`{/tmp}` → 400「tmp 不作为资料目录」；`{专用目录}` → 200 且 `GET /root` 已切换；`GET /cases` → `{cases:[]}`。
+- 已知缺口（如实）：本仓**没有 `npm run audit` 脚本**（家族一致性审计跑不了），需要时得从 starter 补 `check-conformance.mjs`；界面加载与点击仍待实机。
+
 ## 0.1.2-rc.24（2026-11-11，AI 对话面板契约第三轮复核）
 
 - 补齐**会话变化订阅**：`desktopWorkbenches.subscribe()` 驱动 `paneTick` 重渲染（rc.23 记为已做，代码里没有）
